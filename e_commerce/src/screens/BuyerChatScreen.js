@@ -45,10 +45,12 @@ const BuyerChats = (props) => {
 
     
   try{
-  socket.on ("chat message", (msg) => {     // receive a message from the backend
+  socket.on ("chat message", async(msg) => {     // receive a message from the backend
         
     
-      saveChats(msg.chats)
+     await saveChats(msg.chats)
+     
+
     
   })
   }
@@ -175,7 +177,7 @@ const fetchChats = async() => {
             value={text} 
             autoCapitalize="none"
             autoCorrect={false}
-            placeholder="Enter Username"
+            placeholder="Enter Your Chat"
             onChangeText={(newValue)=> setText(newValue)} 
         /> 
 

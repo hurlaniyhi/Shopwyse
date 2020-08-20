@@ -164,7 +164,8 @@ try{
             autoCapitalize="none"
             autoCorrect={false}
             value={text}
-            placeholder="Enter Username"
+            //multiline={true}
+            placeholder="Enter Your Chat"
             onChangeText={(newValue)=> setText(newValue)} 
         /> 
 
@@ -203,7 +204,7 @@ SellerChats.navigationOptions = ({navigation}) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: wp("7%"),
-    paddingTop: hp("0%"),
+    paddingTop: hp("2%"),
     color: "white"
   },
 
@@ -242,7 +243,8 @@ sms: {
     // width: wp("60%"),
     paddingRight: wp("4%"), 
     fontSize: wp("4.5%"), 
-    paddingLeft: wp("3%")
+    paddingLeft: wp("3%"),
+    paddingVertical: hp("2%")
 },
  
  
