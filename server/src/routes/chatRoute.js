@@ -100,4 +100,14 @@ router.post('/saveChats', async (req, res) => {
 
 })
 
+
+router.post("/delchats", async(req, res) => {
+    const del = await Chat.deleteMany({}, (err,doc)=>{  
+      if(!err){
+        return res.send("success")
+      }
+    })
+       
+  })
+
 module.exports = router

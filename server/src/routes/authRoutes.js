@@ -16,13 +16,34 @@ const router = express.Router()
 
 router.post("/signup", async(req,res) => {
     console.log(req.body)
-    req.body.username = req.body.username.replace(/ /g, "")
+    //req.body.username = req.body.username.replace(/ /g, "")  replace all spaces
+    req.body.email = req.body.email.replace(/ /g, "")
+
+    if(req.body.username[req.body.username.length-1] == " "){
+        req.body.username = req.body.username.replace(req.body.username[req.body.username.length-1],"")
+    }
+
+    if (req.body.username.includes(" ")){
+        return res.send("username should not space")
+    }
+
+    function code(str){
+        return str.toLowerCase().replace(/^\w|\s\w/g, function (letter) {
+            return letter.toUpperCase();
+        })
+      }
+
+    req.body.username = code(req.body.username)
+    
+    console.log(req.body.username)
+
     
     const {email, password, username, userType, phoneNumber} = req.body  
 
     if(!email || !password || !username || !phoneNumber){
         return res.send("You must provide all information")
     }
+
     
     try{
     
@@ -53,15 +74,33 @@ router.post("/signup", async(req,res) => {
 })
 
 router.post('/signin', async(req, res) => {
+
     req.body.username = req.body.username.replace(/ /g, "")
+
+    
+    function code(str){
+        return str.toLowerCase().replace(/^\w|\s\w/g, function (letter) {
+            return letter.toUpperCase();
+        })
+      }
+
+    
+      req.body.username = code(req.body.username)
+      console.log(req.body.username)
+    
+   
+
+
     const {username, password} = req.body
-    console.log(req.body)
+    
     
     
     
     if (!username || !password){ 
       return  res.send("You must provide username and password")
     }
+
+   
     
    const user = await User.findOne({username: username})
     // we are using await because the operation(asynchronous) is going to take some time as 
@@ -69,7 +108,7 @@ router.post('/signin', async(req, res) => {
 
     //NOTE: the user value gotten from the database will contain existing email and hashed password
 
-    console.log(user.password)
+    
     if(!user){
         return res.send("Invalid password or email")
     }
@@ -127,21 +166,21 @@ router.post('/uploadDp', requireAuth, async (req, res) => {
          )
       
       
-         router.get("/profile", requireAuth, async(req,res)=>{
-            if (req.user.userType == "seller"){
-                const orders = await Request.find({ownerName: req.user.username})  // number of received order
-                const uploaded = await Good.find({ownerName: req.user.username})   //  number of goods uploaded
-                const receivedOrders = orders.length
-                const goodsUploaded = uploaded.length
-                return res.send({username: req.user.username, email: req.user.email, phoneNumber: req.user.phoneNumber, userType: req.user.userType, receivedOrders, goodsUploaded})
-            }
-            else{
+router.get("/profile", requireAuth, async(req,res)=>{
+    if (req.user.userType == "seller"){
+        const orders = await Request.find({ownerName: req.user.username})  // number of received order
+        const uploaded = await Good.find({ownerName: req.user.username})   //  number of goods uploaded
+        const receivedOrders = orders.length
+        const goodsUploaded = uploaded.length
+        return res.send({username: req.user.username, email: req.user.email, phoneNumber: req.user.phoneNumber, userType: req.user.userType, receivedOrders, goodsUploaded})
+    }
+    else{
         
-                const orderNumber = await Request.find({requestorName: req.user.username}) //  number of request made
-                const orderMade = orderNumber.length
-                console.log({username: req.user.username, email: req.body.email, phoneNumber: req.user.phoneNumber, userType: req.user.userType, orderMade})
-                return res.send({username: req.user.username, email: req.user.email, phoneNumber: req.user.phoneNumber, userType: req.user.userType, orderMade})
-            }
+        const orderNumber = await Request.find({requestorName: req.user.username}) //  number of request made
+        const orderMade = orderNumber.length
+        console.log({username: req.user.username, email: req.user.email, phoneNumber: req.user.phoneNumber, userType: req.user.userType, orderMade})
+        return res.send({username: req.user.username, email: req.user.email, phoneNumber: req.user.phoneNumber, userType: req.user.userType, orderMade})
+    }
              
         })
 
@@ -253,6 +292,15 @@ router.post('/updatePassword', async (req, res) => {
 
      }
  )
+
+ router.post("/delusers", async(req, res) => {
+    const del = await User.deleteMany({}, (err,doc)=>{  
+      if(!err){
+        return res.send("success")
+      }
+    })
+       
+  })
 
 
 module.exports = router

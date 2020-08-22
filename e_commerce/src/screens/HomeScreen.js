@@ -1,4 +1,4 @@
-import React, {useState,useContext} from "react";
+import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, Button, ScrollView ,
    FlatList, ImageBackground, ActivityIndicator} from "react-native";
 import {SafeAreaView} from 'react-navigation'
@@ -12,10 +12,10 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
 
-
+//import io from "socket.io-client"
 
 // use expo install expo-image-picker  to install expo image picker
-import * as ImagePicker from 'expo-image-picker'
+//import * as ImagePicker from 'expo-image-picker'
 
 
 
@@ -25,6 +25,14 @@ const HomeScreen = (props) => {
   const [date, setDate] = useState("")
 
 
+  // function connectMe(){
+  //   socket = io("http://192.168.43.159:8080")
+  // }
+
+
+  // useEffect(()=>{
+  //   connectMe()
+  // }, [])
   
 
   return (
@@ -44,7 +52,7 @@ const HomeScreen = (props) => {
     
 
    {!state.goods ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <FlatList
-    data={state.goods.reverse()}
+    data={state.goods}
     horizontal
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {

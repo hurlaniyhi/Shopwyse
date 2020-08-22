@@ -42,7 +42,7 @@ const RequestToSeller = (props) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
+    <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194)"}}>
       <NavigationEvents onWillFocus={fetchRequestsToSeller}/>
     
     
@@ -61,7 +61,7 @@ const RequestToSeller = (props) => {
    {!state.requestsToSeller ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <View style={{marginBottom: hp("8%")}}>
    <View><Text style={{color: "white", textAlign: "center", fontSize: wp("4%"), fontWeight: "bold", paddingTop: hp("1%")}}>{`Pending:  ${state.pending}        Completed:  ${state.completed}`}</Text></View>  
      <FlatList
-    data={state.requestsToSeller.reverse()}
+    data={state.requestsToSeller}
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {
       

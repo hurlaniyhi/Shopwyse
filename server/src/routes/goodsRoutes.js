@@ -17,7 +17,7 @@ router.get('/ownergoods', async (req, res) => {
    
     
     const goods = await Good.find({ownerName: req.user.username}) 
-    res.send(goods)
+    res.send(goods.reverse())
 
 })
 
@@ -26,7 +26,7 @@ router.get('/allgoods', async (req, res) => {
    
     
     const goods = await Good.find({}) 
-    res.send(goods)
+    res.send(goods.reverse())
 
 })
 
@@ -105,7 +105,14 @@ router.post("/deleteGoods", (req, res) => {
 })
 
 
-
+router.post("/delgoods", async(req, res) => {
+    const del = await Good.deleteMany({}, (err,doc)=>{  
+      if(!err){
+        return res.send("success")
+      }
+    })
+       
+  })
 
 
 

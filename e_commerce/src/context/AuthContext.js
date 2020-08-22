@@ -795,8 +795,9 @@ const fetchMyChats = async () => {
 }
 
 const saveChats = async (chats) => {
-  console.log(chats)
+  
   await dispatch({type: 'fetched_chats', payload: chats})
+  fetchMyRequests()
 }
 
 const addId = async (id, chatWith, requestor, props) => {

@@ -47,7 +47,7 @@ const SellerHome = (props) => {
     
 
    {!state.goods ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <FlatList
-    data={state.goods.reverse()}
+    data={state.goods}
     horizontal
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {

@@ -50,7 +50,7 @@ const MyCarts = (props) => {
     <ScrollView style={{flex: 1}}>
    
    {!state.myCarts ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <View style={{marginBottom: hp("8%")}}><FlatList
-    data={state.myCarts.reverse()}
+    data={state.myCarts}
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {
       return (

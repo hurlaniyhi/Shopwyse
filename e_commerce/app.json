@@ -32,7 +32,7 @@
     "android": {
       "package": "com.lingonsoft.ShopWyse",
       "versionCode": 1,
-      "icon": "./assets/shopwyzeLogo.png"
+      "icon": "./assets/shopwyzeLogo.png"  
     }
   }
 }

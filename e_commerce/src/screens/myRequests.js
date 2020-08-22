@@ -1,4 +1,4 @@
-import React, {useState,useContext} from "react";
+import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, Button, ScrollView ,
    FlatList, ImageBackground, ActivityIndicator, YellowBox} from "react-native";
 import {SafeAreaView} from 'react-navigation'
@@ -8,6 +8,7 @@ import {FontAwesome, Feather, Entypo} from '@expo/vector-icons'
 import {NavigationEvents} from 'react-navigation'
 import tradeApi from "../API/tradeApi"
 import AuthContext from "../context/AuthContext"
+
 
 
 import {
@@ -38,13 +39,12 @@ const AllRequests = (props) => {
     call(args).catch(console.log(console.error()))
   }
 
- 
-    
+  
    
 
 
   return (
-    <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
+    <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194)"}}>
       <NavigationEvents onWillFocus={fetchMyRequests}/>
     
    
@@ -58,7 +58,7 @@ const AllRequests = (props) => {
     <ScrollView style={{flex: 1}}>
    
    {!state.myRequests ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <View style={{marginBottom: hp("8%")}}><FlatList
-    data={state.myRequests.reverse()}
+    data={state.myRequests}
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {
       return (

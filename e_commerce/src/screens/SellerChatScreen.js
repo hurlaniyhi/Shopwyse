@@ -1,6 +1,6 @@
 import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, ScrollView ,
-   FlatList, ImageBackground, ActivityIndicator, YellowBox, TextInput} from "react-native";
+   FlatList, ImageBackground, ActivityIndicator, YellowBox, TextInput, KeyboardAvoidingView} from "react-native";
 import {SafeAreaView} from 'react-navigation'
 import {FontAwesome, Feather, Entypo, AntDesign, MaterialIcons} from '@expo/vector-icons'
 import {NavigationEvents} from 'react-navigation'
@@ -13,6 +13,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
+import { KeyboardAwareSectionList } from "react-native-keyboard-aware-scroll-view";
 
 
 
@@ -22,7 +23,7 @@ const SellerChats = (props) => {
 
   // const data = props.navigation.getParam("data")
 
-  const {state, saveChats, fetchMyChats, stopLoading} = useContext(AuthContext)
+  const {state, saveChats, fetchMyChats, stopLoading, fetchRequestsToSeller} = useContext(AuthContext)
 
   const [text,setText] = useState("")
 
@@ -69,6 +70,19 @@ try{
   
     useEffect(() => {
       websocket()   
+
+      return () => {
+      
+        try{
+      
+          socket.emit("stop count", {chatId: state.chatId, sender: "seller"})
+          fetchRequestsToSeller()
+          
+        }
+        catch{
+          alert("No network connection")
+        }
+      }
     }, []);
   
   
@@ -119,6 +133,7 @@ try{
 
 
   return (
+    <KeyboardAvoidingView style={{flex:1}} behaviour="padding">
     <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
       <NavigationEvents onWillFocus={fetchChats}/>
     
@@ -142,13 +157,13 @@ try{
     renderItem={({item}) => {
       return (
         <View>
-       {item.side == "left" ? <View style={{alignItems: "flex-end", marginRight: wp("2%")}}>
+       {item.side == "left" ? <View style={{alignItems: "flex-end", marginRight: wp("2%"), marginLeft: wp("15%")}}>
           <View style={[styles.sms, {backgroundColor: "#D7F1BF"}]}>
-           <Text>{item.text}</Text><Text style={{fontSize:wp("1.5%"), color: "#595757"}}>{item.time}</Text>
+           <Text style={{paddingBottom: hp("0.5%")}}>{item.text}</Text><Text style={{fontSize:wp("1.5%"), color: "#595757"}}>{item.time}</Text>
           </View>
-        </View>: <View style={{alignItems: "flex-start", marginLeft: wp("2%")}}>
+        </View>: <View style={{alignItems: "flex-start", marginLeft: wp("2%"), marginRight: wp("15%")}}>
         <View style={styles.sms}>
-          <Text>{item.text}</Text><Text style={{fontSize:wp("1.5%"), color: "#595757"}}>{item.time}</Text>
+          <Text style={{paddingBottom: hp("0.5%")}}>{item.text}</Text><Text style={{fontSize:wp("1.5%"), color: "#595757"}}>{item.time}</Text>
         </View>
       </View> }
       </View>
@@ -163,8 +178,8 @@ try{
             style={styles.textInput} 
             autoCapitalize="none"
             autoCorrect={false}
+            multiline={true}
             value={text}
-            //multiline={true}
             placeholder="Enter Your Chat"
             onChangeText={(newValue)=> setText(newValue)} 
         /> 
@@ -176,6 +191,7 @@ try{
     </ImageBackground>
     
     </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 };
 
@@ -209,7 +225,8 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    height: hp("6.7%"),
+    //height: hp("6.7%"),
+    flex: 1,
     marginBottom: hp("0.5%"),
     paddingLeft: wp("5%"),
     backgroundColor: "whitesmoke",
@@ -234,14 +251,14 @@ send: {
   
 
 sms: {
-    height: hp("5.7%"),
+    
     marginVertical: hp("1%"),
-    paddingLeft: wp("4%"),
+    paddingTop: hp("1.5%"),
+    paddingBottom: hp("1%"),
     backgroundColor: "whitesmoke",
     borderRadius: 10,
     justifyContent: "center",
-    // width: wp("60%"),
-    paddingRight: wp("4%"), 
+    paddingRight: wp("3%"), 
     fontSize: wp("4.5%"), 
     paddingLeft: wp("3%"),
     paddingVertical: hp("2%")

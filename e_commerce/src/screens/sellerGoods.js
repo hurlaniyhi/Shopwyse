@@ -50,7 +50,7 @@ const SellerGoods = (props) => {
     <ScrollView style={{flex: 1}}>
    
    {!state.myProducts ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <View style={{marginBottom: hp("8%")}}><FlatList
-    data={state.myProducts.reverse()}
+    data={state.myProducts}
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {
       return (

@@ -18,7 +18,7 @@ router.get('/myCarts', async (req, res) => {
     
     const carts = await Cart.find({cartOwner: req.user.username}) 
     console.log(carts)
-    res.send(carts)
+    res.send(carts.reverse())
 
 
 })
@@ -73,6 +73,17 @@ router.post("/deleteCart", (req, res) => {
         }
     })
 })
+
+
+
+router.post("/delcarts", async(req, res) => {
+    const del = await Cart.deleteMany({}, (err,doc)=>{  
+      if(!err){
+        return res.send("success")
+      }
+    })
+       
+  })
 
 
 module.exports = router

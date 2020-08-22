@@ -18,7 +18,7 @@ router.get('/buyerRequests', async (req, res) => {
     console.log("all request made by buyer")
    
     const requests = await Request.find({requestorName: req.user.username}) 
-    res.send(requests)
+    res.send(requests.reverse())
 
 })
 
@@ -29,7 +29,7 @@ router.get('/requestsToSeller', async (req, res) => {
     if(requests){
     
  
-    res.send(requests)
+    res.send(requests.reverse())
     }
 })
 
@@ -135,7 +135,7 @@ router.post("/deleteRequest", (req, res) => {
 
 
 
- router.post("/deleteRequests", async(req, res) => {
+ router.post("/delRequests", async(req, res) => {
       const del = await Request.deleteMany({}, (err,doc)=>{
         if(!err){
           return res.send("success")

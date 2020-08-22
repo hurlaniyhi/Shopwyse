@@ -27,7 +27,7 @@ app.use(cors({
     origin: "*",
     methods: "*"
 }))
-
+  
 app.use(bodyParser.json())
 app.use("/",authRoutes) //  the "/" is not necessary
 app.use(goodsRoutes)
@@ -40,6 +40,7 @@ const messages = []
 
 io.sockets.on("connection", socket => {
     console.log("A user is connected")
+
     
     socket.on("chat message", msg => {   
         
@@ -164,10 +165,12 @@ io.sockets.on("connection", socket => {
           if(msg.sender == "buyer"){
               buyerchat = 0
               sellerchat = 1
+              sendTo = document.ownerName
           }
           else if(msg.sender == "seller"){
             buyerchat = 1
             sellerchat = 0
+            sendTo = document.requestorName
           }
 
 
@@ -190,8 +193,9 @@ io.sockets.on("connection", socket => {
         {new: true}, (err,doc)=>{
     
         if (!err){
+
+            console.log("successfully updated")
         
-        console.log("successfully updated")
         
         }
        else{
@@ -203,6 +207,7 @@ io.sockets.on("connection", socket => {
         }
 
         countChats()
+        
 
     })
 
