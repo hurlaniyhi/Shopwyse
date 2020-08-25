@@ -133,7 +133,7 @@ try{
 
 
   return (
-    <KeyboardAvoidingView style={{flex:1}} behaviour="padding">
+    <KeyboardAvoidingView style={{flex:1}} behavior={null} keyboardVerticalOffset={80}>
     <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
       <NavigationEvents onWillFocus={fetchChats}/>
     

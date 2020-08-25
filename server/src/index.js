@@ -3,6 +3,7 @@ require("./models/Goods")
 require("./models/Request")
 require("./models/Cart")
 require("./models/chats")
+require("./models/Likes")
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
@@ -11,6 +12,7 @@ const goodsRoutes = require("./routes/goodsRoutes")
 const requestRoutes = require("./routes/requestRoutes")
 const cartRoute = require("./routes/cartRoute")
 const chatRoute = require("./routes/chatRoute")
+const likeRoute = require("./routes/likeRoute")
 const cors = require("cors")
 
 const requireAuth = require("./middlewares/requireAuth")
@@ -20,7 +22,9 @@ const app = express()
 const server = require("http").createServer(app)
 const io = require('socket.io').listen(server)
 const Chat = mongoose.model('Chat')
-const Request = mongoose.model('Request')
+const Good = mongoose.model('Good')
+const Like = mongoose.model('Like')
+const Request = mongoose.model('Request') 
 
 
 app.use(cors({
@@ -29,14 +33,15 @@ app.use(cors({
 }))
   
 app.use(bodyParser.json())
-app.use("/",authRoutes) //  the "/" is not necessary
+app.use("/",authRoutes) 
 app.use(goodsRoutes)
 app.use(requestRoutes)
 app.use(cartRoute)
 app.use(chatRoute)
+app.use(likeRoute)
 
 
-const messages = []
+
 
 io.sockets.on("connection", socket => {
     console.log("A user is connected")
@@ -115,16 +120,11 @@ io.sockets.on("connection", socket => {
 
    }
 
-        
-    
-
      
     
     //io.emit("chat message", messages) 
     saveChat()
     
-
-      
     
                                                         
     })
@@ -143,7 +143,7 @@ io.sockets.on("connection", socket => {
                
  
                io.in(msg.chatId).emit("fetch chats", {chats})
-    }
+            }
             else {
                 io.in(msg.chatId).emit("fetch chats", {message: "no chat found"})
            }
@@ -264,6 +264,99 @@ io.sockets.on("connection", socket => {
         }
 
         stopCount()
+
+    })
+
+
+
+
+
+
+    socket.on("likes", async(msg) =>{
+
+    const document = await Like.findOne({productID: msg.id, username: msg.username})
+    const Allgoods = await Good.findOne({_id: msg.id})
+    console.log("Ok")
+    // if(!Allgoods){
+    //     return res.send("Product did not exist")
+    // }
+    
+    
+    if (document){
+     
+       await Like.findByIdAndRemove(document._id, async(err,doc)=>{
+            if(!err){
+
+                if(Allgoods.likes == 0){
+                    var add = 0
+                }
+                else{
+                    var add = 1
+                }
+
+                await Good.findByIdAndUpdate({_id: msg.id}, {
+                    _id: msg.id,
+                    image: Allgoods.image,  
+                    goodName: Allgoods.goodName,
+                    ownerName: Allgoods.ownerName,
+                    phoneNumber: Allgoods.phoneNumber,
+                    price: Allgoods.price,
+                    likes: Allgoods.likes - add,
+                    likeColor: "none"
+                    
+                }, 
+                {new: true}, (err,doc)=>{
+            
+                if (!err){
+                console.log("successfully remove a like")
+                io.emit("likes", {response: "good"}) 
+                }
+               else{ 
+                console.log("error occur during update")
+                //res.send("error occur during update")
+                }
+            })
+            
+            }
+            else{
+                console.log("error")
+            }
+        })
+
+
+    }
+    else{
+        const like = new Like({
+            productID: msg.id,
+            username: msg.username
+        })
+        await like.save()
+        console.log("Successful")
+
+        await Good.findByIdAndUpdate({_id: msg.id}, {
+            _id: msg.id,
+            image: Allgoods.image,  
+            goodName: Allgoods.goodName,
+            ownerName: Allgoods.ownerName,
+            phoneNumber: Allgoods.phoneNumber,
+            price: Allgoods.price,
+            likes: Allgoods.likes + 1,
+            likeColor: "none"
+            
+        }, 
+        {new: true}, (err,doc)=>{
+    
+        if (!err){
+        console.log("successfully added a like")
+        io.emit("likes", {response: "good"}) 
+        }
+       else{ 
+        console.log("error occur during update")
+        res.send("error occur during update")
+        }
+    })
+    }
+
 
     })
 

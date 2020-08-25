@@ -80,10 +80,10 @@ const MyCarts = (props) => {
           </View>
           
 
-          <View style={{flexDirection: "row"}}>
+          {/* <View style={{flexDirection: "row"}}>
             <Text style={{color: "#797979", fontSize: wp("4.5%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${57} likes`}</Text>
             <AntDesign name="hearto" style={{color: "#797979", marginLeft: wp("3%")}} size={32} />
-          </View>
+          </View> */}
         </View>
     
       )
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     marginTop: hp("2p%"),
     marginBottom: hp("2%"), 
     borderRadius: 12,
-    height: hp("70%"),
+    height: hp("67%"),
     width: wp("85%")
   }, 
   price:{

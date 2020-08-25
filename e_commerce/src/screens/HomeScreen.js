@@ -12,7 +12,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
 
-//import io from "socket.io-client"
+import io from "socket.io-client"
 
 // use expo install expo-image-picker  to install expo image picker
 //import * as ImagePicker from 'expo-image-picker'
@@ -21,18 +21,30 @@ import {
 
 const HomeScreen = (props) => {
 
-  const {state, clearErrorMessage, fetchGoods} = useContext(AuthContext)
+  const {state, clearErrorMessage, fetchGoods, updateLikes} = useContext(AuthContext)
   const [date, setDate] = useState("")
 
+  const sendlike = () => {
 
-  // function connectMe(){
-  //   socket = io("http://192.168.43.159:8080")
-  // }
+    socket = io("https://shopwyse-backend.herokuapp.com")
+    socket.on("likes", msg => {
+      fetchGoods()
+    })
+
+  }
 
 
-  // useEffect(()=>{
-  //   connectMe()
-  // }, [])
+  useEffect(()=>{
+
+   sendlike()
+
+  }, [])
+
+
+  const updateLike = (id) => {
+    socket.emit("likes", {username: state.username, id: id})
+  }
+
   
 
   return (
@@ -73,8 +85,11 @@ const HomeScreen = (props) => {
           <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("6%")}}>{`NGN ${item.price}`}</Text></View>
           </TouchableOpacity>
           <View style={{flexDirection: "row"}}>
-            <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${57} likes`}</Text>
-            <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("37%")}} size={30} />
+            <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
+            <TouchableOpacity onPress={()=> updateLike(item._id)}>
+            {item.likeColor != "red" ? <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("37%")}} size={30} /> : 
+            <AntDesign name="heart" style={{color: "red", marginLeft: wp("37%")}} size={30} />}
+            </TouchableOpacity>
           </View>
         </View>
       )

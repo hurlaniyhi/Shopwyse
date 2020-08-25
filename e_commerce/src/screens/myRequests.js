@@ -19,7 +19,7 @@ import {
 
 
 // use expo install expo-image-picker  to install expo image picker
-import * as ImagePicker from 'expo-image-picker'
+//import * as ImagePicker from 'expo-image-picker'
 import call from 'react-native-phone-call'
 
 

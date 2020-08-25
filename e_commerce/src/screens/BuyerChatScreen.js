@@ -1,6 +1,6 @@
 import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, ScrollView ,
-   FlatList, ImageBackground, ActivityIndicator, YellowBox, TextInput, KeyboardAvoidingView} from "react-native";
+   FlatList, ImageBackground, ActivityIndicator, YellowBox, TextInput, KeyboardAvoidingView, StatusBar, Platform} from "react-native";
   import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
   import {SafeAreaView} from 'react-navigation'
 import {Zocial} from '@expo/vector-icons'
@@ -18,6 +18,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
+import { Header } from "react-native/Libraries/NewAppScreen";
 
 
 
@@ -147,20 +148,25 @@ const fetchChats = async() => {
 // https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png
 // minheight....532
 
+{/* <KeyboardAwareScrollView 
+resetScrollToCoords={{ x: 0, y: 0 }} 
+viewIsInsideTabBar={false} 
+contentContainerStyle={[{minHeight: 380}, {overflow:"hidden", flex: 1}]} 
+style={[Platform.OS === 'ios' ? {height:65}:{},{zIndex:50, flex: 1}]} 
+scrollEnabled={false} enableAutomaticScroll={true}> */}
+
   return (
-    <KeyboardAwareScrollView 
-  resetScrollToCoords={{ x: 0, y: 0 }} 
-  viewIsInsideTabBar={false} 
-  contentContainerStyle={[{minHeight: 380}, {overflow:"hidden", flex: 1}]} 
-  style={[Platform.OS === 'ios' ? {height:65}:{},{zIndex:50, flex: 1}]} 
-  scrollEnabled={false} enableAutomaticScroll={true}>
+    <KeyboardAvoidingView 
+    style={{flex: 1}}
+    behavior={"height"}
+    keyboardVerticalOffset={Header.HEIGHT + StatusBar.currentHeight}
+    enabled = {Platform.OS === 'android'}
+    >
     <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
       <NavigationEvents onWillFocus={fetchChats}/>
       
     
     
-   
-   
    
     <ImageBackground 
     source={require("../../assets/whatsappBack.png")}
@@ -217,7 +223,7 @@ const fetchChats = async() => {
     </ImageBackground>
     
     </SafeAreaView>
-    </KeyboardAwareScrollView> 
+    </KeyboardAvoidingView> 
   )
 };
 

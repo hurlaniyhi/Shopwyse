@@ -24,6 +24,12 @@ const goodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    likes: {
+        type: Number,
+    },
+    likeColor: {
+        type: String
+    }
 
    
 })

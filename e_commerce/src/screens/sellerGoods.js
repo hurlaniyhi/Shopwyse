@@ -64,7 +64,9 @@ const SellerGoods = (props) => {
               id: item._id,
               image: item.image,
               goodName: item.goodName,
-              price: item.price
+              price: item.price,
+              likes: item.likes,
+              likeColor: item.likeColor
             }
           })}>
           <EvilIcons name="pencil" size={40} style={{marginLeft: wp("3%"), color: "#595757"}}/>
@@ -79,7 +81,7 @@ const SellerGoods = (props) => {
           </View>
 
           <View style={{flexDirection: "row"}}>
-            <Text style={{color: "#797979", fontSize: wp("4.5%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${57} likes`}</Text>
+            <Text style={{color: "#797979", fontSize: wp("4.5%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
             <AntDesign name="hearto" style={{color: "#797979", marginLeft: wp("3%")}} size={32} />
           </View>
         </View>

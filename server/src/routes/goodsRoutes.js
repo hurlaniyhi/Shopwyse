@@ -5,6 +5,7 @@ const multer = require('multer')
 const path = require('path')
 
 const Good = mongoose.model('Good')
+const Like = mongoose.model('Like')
 
 const router = express()
 
@@ -21,12 +22,61 @@ router.get('/ownergoods', async (req, res) => {
 
 })
 
-router.get('/allgoods', async (req, res) => {
-    console.log("welcome")
+// router.get('/allgoods', async (req, res) => {
+//     console.log("welcome")
    
     
-    const goods = await Good.find({}) 
-    res.send(goods.reverse())
+//     const goods = await Good.find({})
+    
+
+//     res.send(goods.reverse())
+
+// })
+
+
+
+router.post('/allgoods', async (req, res) => {
+    console.log("welcome")
+
+    const {username} = req.body
+   
+    
+    const goods = await Good.find({})
+    const likes = await Like.find({username: username})
+
+    if(!likes){
+
+
+        for (let check of goods){
+
+           check.likeColor = "none"
+
+        }
+        res.send(goods.reverse())
+
+    }
+    else {
+        let sortLikes
+        
+        for (let check of goods){
+
+            sortLikes = likes.filter(name=>(
+                check._id == name.productID
+              ))
+            
+              if (sortLikes.length != 0){
+                check.likeColor = "red"
+              }
+              else{
+                  check.likeColor = "none"
+              }
+
+        }
+
+        res.send(goods.reverse())
+    }
+
+
 
 })
 
@@ -50,7 +100,9 @@ router.post('/uploadGoods', async (req, res) => {
                     goodName,
                     ownerName: req.user.username,
                     phoneNumber: req.user.phoneNumber, 
-                    price
+                    price,
+                    likes: 0,
+                    likeColor: "none"
                 })
                 await good.save()
                 console.log("Successful")
@@ -65,7 +117,7 @@ router.post('/uploadGoods', async (req, res) => {
 
 
 router.post('/updateGoods', async (req, res) => {
-    const {id, image_url, goodName, price} = req.body
+    const {id, image_url, goodName, price, likes, likeColor} = req.body
     
     // test id ....5f2163c179fda6235461a8ef
    await Good.findByIdAndUpdate({_id: req.body.id}, {
@@ -74,7 +126,9 @@ router.post('/updateGoods', async (req, res) => {
         goodName: goodName,
         ownerName: req.user.username,
         phoneNumber: req.user.phoneNumber,
-        price: price
+        price: price,
+        likes: likes,
+        likeColor
         
     }, 
     {new: true}, (err,doc)=>{

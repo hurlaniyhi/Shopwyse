@@ -1,4 +1,4 @@
-import React, {useState,useContext} from "react";
+import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, Button, ScrollView ,
    FlatList, ImageBackground, ActivityIndicator} from "react-native";
 import {SafeAreaView} from 'react-navigation'
@@ -19,7 +19,7 @@ import {
 
 // use expo install expo-image-picker  to install expo image picker
 import * as ImagePicker from 'expo-image-picker'
-
+import io from "socket.io-client"
 
 
 const SellerHome = (props) => {
@@ -28,7 +28,25 @@ const SellerHome = (props) => {
   const [date, setDate] = useState("")
 
 
-  
+  const sendlike = () => {
+
+    socket = io("https://shopwyse-backend.herokuapp.com")
+    socket.on("likes", msg => {
+      fetchGoods()
+    })
+
+  }
+
+
+  useEffect(()=>{
+
+   
+    sendlike()
+    
+
+  }, [])
+
+
 
   return (
     <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
@@ -58,7 +76,7 @@ const SellerHome = (props) => {
           <Text style={{textAlign: "center", color: "green", fontSize: wp("5%")}}>{item.goodName}</Text>
           <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("6%")}}>{`NGN ${item.price}`}</Text></View>
           <View style={{flexDirection: "row"}}>
-            <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${57} likes`}</Text>
+            <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
             <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("37%")}} size={30} />
           </View>
         </View>

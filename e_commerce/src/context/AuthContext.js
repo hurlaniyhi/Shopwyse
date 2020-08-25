@@ -384,12 +384,12 @@ export const AuthProvider = (props) => {
 
 
 
-   const editProduct = async (id, image_url, goodName, price) => {
+   const editProduct = async (id, image_url, likes, likeColor, goodName, price) => {
         
     dispatch({type: 'sending', payload: "loading"})
     
     try{
-    const response = await tradeApi.post('/updateGoods', {id, image_url, goodName, price})
+    const response = await tradeApi.post('/updateGoods', {id, image_url, likes, likeColor, goodName, price})
          
     if(response.data === "success"){
       alert("Product succesfully updated")
@@ -568,7 +568,7 @@ const changePassword = async (code, password, props) => {
 
     try{
 
-    const response = await tradeApi.get('/allgoods')
+    const response = await tradeApi.post('/allgoods', {username: state.username})
          
          if(response.data){
              
@@ -582,6 +582,25 @@ const changePassword = async (code, password, props) => {
       }
         
     
+}
+
+
+const updateLikes = async (id) => {
+  try{
+
+    const response = await tradeApi.post('/like', {id: id, username: state.username})
+    if (response.data){
+      console.log(response.data)
+      fetchGoods()
+    }
+    else{
+      console.log("something went wrong at the backend")
+    }
+
+  }
+  catch{
+    alert("No network connection")
+  }
 }
 
 
@@ -891,7 +910,8 @@ const addId2 = async (id, chatWith, requestor, props) => {
         userInfo, 
         forgetPassword,
         changePassword,
-        stopLoading
+        stopLoading,
+        updateLikes
         
     }
     

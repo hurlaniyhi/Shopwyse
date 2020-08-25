@@ -58,7 +58,7 @@ const EditProduct = (props) => {
       </View>
      
      
-      <TouchableOpacity style={styles.button} onPress={()=>editProduct(variab.id, variab.image, productName, price)}>
+      <TouchableOpacity style={styles.button} onPress={()=>editProduct(variab.id, variab.image, variab.likes, variab.likeColor, productName, price)}>
             {!state.submitting ?<Text style={{fontSize: wp("5%"), color: "white"}}>Update Product</Text> : 
             <View style={{flexDirection: "row", justifyContent: "center"}}>
               <Text style={{fontSize: wp("5%"), color: "white"}}>Updating    </Text>  
