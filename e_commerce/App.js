@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, Component} from 'react'
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {createSwitchNavigator} from 'react-navigation'
@@ -11,12 +11,12 @@ import UploadProduct from "./src/screens/UploadProduct";
 import SignUp from "./src/screens/SignupScreen";
 import SignIn from "./src/screens/SigninScreen";
 import UserType from "./src/screens/UserType"
-import { Text, StyleSheet, Image, View, ScrollView, TouchableOpacity, Button } from "react-native";
+import { Text, StyleSheet, Image, View, ScrollView, TouchableOpacity, Button, ImageBackground, StatusBar } from "react-native";
 //import {Icon, Button, Container, Header,Body, Content, Left} from 'native-base'
 import {SafeAreaView} from 'react-navigation'
 import ResolveAuth from './src/screens/resolveAuth'
 import {FontAwesome5} from '@expo/vector-icons'
-import {FontAwesome, Entypo} from '@expo/vector-icons'
+import {FontAwesome, AntDesign} from '@expo/vector-icons'
 import Request from './src/screens/Request'
 import AllRequests from "./src/screens/myRequests"
 import ResquestToSeller from "./src/screens/RequestToSeller"
@@ -30,12 +30,15 @@ import ProfilePicture from "./src/screens/ProfilePicture"
 import ForgetPassword from "./src/screens/ForgetPassword"
 import ChangePassword from "./src/screens/ChangePassword"
 import SellerHome from "./src/screens/SellerHome"
+import {AsyncStorage} from 'react-native'
+import App1 from "./src/screens/introSlider"
 
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
 
+// import AppIntroSlider from 'react-native-app-intro-slider'
 
 
 
@@ -123,7 +126,9 @@ drawer5.navigationOptions = {
 
 const switchNavigator = createSwitchNavigator({
   autoSignin: ResolveAuth,
-  UserType: UserType,
+  //UserType: UserType,
+  slider: App1,
+
 
   loginFlow: createStackNavigator({
     Signup: SignUp,
@@ -214,10 +219,16 @@ const styles = StyleSheet.create({
     marginTop: hp("3%"),
     marginBottom: hp("7%")
     
-  }
+  },
+
 })
 
 const App = createAppContainer(switchNavigator);
+
+
+
+
+
 
 export default () => {
   return(

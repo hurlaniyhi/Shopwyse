@@ -23,17 +23,12 @@ const SignIn = (props) => {
 
     const {state, signin, clearErrorMessage} = useContext(AuthContext)
    
-    const userType = async () => {
-    await clearErrorMessage()
-    const variab = props.navigation.getParam("userType")
-    await AsyncStorage.setItem("userType", variab)
     
-    }
 
   return (
     <SafeAreaView forceInset={{top: "always"}} style={{flex: 1}}>
     <ScrollView>
-    <NavigationEvents onWillFocus={()=> userType()}/>
+    <NavigationEvents onWillFocus={()=> clearErrorMessage}/>
      <Text h4 style={styles.text}>Sign In</Text>
      <Text style={{textAlign: "center", paddingBottom: hp("10%"), paddingTop: hp("1%")}}>Login to experience ShopWyze</Text>
      <View style={{marginHorizontal: wp("10%")}}>

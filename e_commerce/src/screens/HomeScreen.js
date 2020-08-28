@@ -27,6 +27,11 @@ const HomeScreen = (props) => {
   const sendlike = () => {
 
     socket = io("https://shopwyse-backend.herokuapp.com")
+
+    // socket.on('connect', function() {
+    //   console.log('check 2', socket.connected);
+    // });
+
     socket.on("likes", msg => {
       fetchGoods()
     })

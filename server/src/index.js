@@ -45,7 +45,7 @@ app.use(likeRoute)
 
 io.sockets.on("connection", socket => {
     console.log("A user is connected")
-
+    //io.emit("connect", "good") 
     
     socket.on("chat message", msg => {   
         

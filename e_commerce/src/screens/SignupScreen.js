@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react";
-import {StyleSheet, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import {StyleSheet, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Picker } from "react-native";
 import {SafeAreaView} from 'react-navigation'
 import {Text, Button} from 'react-native-elements'
 import { View } from "native-base";
@@ -18,6 +18,16 @@ const SignUp = (props) => {
     const [email,setEmail] = useState("")
     const [phoneNumber,setPhoneNumber] = useState("")
     const [password,setPassword] = useState("")
+    const [userType, setUserType] = useState("")
+    const [color, setColor] = useState("#C3C3C3")
+
+    const selectChange = (item) => {
+      setUserType(item)
+      setColor("black")
+      if(item == ""){
+        setColor("#C3C3C3")
+      }
+    }
 
 
   return (
@@ -25,7 +35,7 @@ const SignUp = (props) => {
     <ScrollView>
     <NavigationEvents onWillFocus={clearErrorMessage}/>
      <Text h4 style={styles.text}>Sign Up</Text>
-     <Text style={{textAlign: "center", paddingBottom: hp("10%"), paddingTop: hp("1%")}}>Easily create ShopWyze account</Text>
+     <Text style={{textAlign: "center", paddingBottom: hp("5%"), paddingTop: hp("1%")}}>Easily create ShopWyze account</Text>
      <View style={{marginHorizontal: wp("10%")}}>
      <Text style={styles.label}>Username</Text>
         <TextInput 
@@ -53,6 +63,20 @@ const SignUp = (props) => {
             placeholder="Enter Phone Number"
             onChangeText={(newValue)=> setPhoneNumber(newValue)} 
         /> 
+        <Text style={styles.label}>User Type</Text>
+        <View style={styles.textInput}>    
+          <Picker 
+            selectedValue={userType}
+            style={{color: color}}
+            onValueChange={(itemValue) =>selectChange(itemValue)}
+            placeholder={{label: "Great", value: "yea"}}
+    
+          >
+      <Picker.Item label="Select user type" value=""/>
+      <Picker.Item label="Buyer" value="buyer"/>
+      <Picker.Item label="Seller" value="seller" />
+    </Picker>
+    </View>
                
         <Text style={styles.label}>Password</Text>
             <TextInput 
@@ -66,7 +90,7 @@ const SignUp = (props) => {
 
         {state.errorMessage ? <Text style={{textAlign: "center", color: "red"}}>{state.errorMessage}</Text> : null}
 
-        <TouchableOpacity style={styles.button} onPress={()=>signup(username, email, phoneNumber, password, props)}>
+        <TouchableOpacity style={styles.button} onPress={()=>signup(username, email, phoneNumber, userType, password, props)}>
         {!state.submitting ?<Text style={{fontSize: wp("5%"), color: "white"}}>Sign Up</Text> : 
             <View style={{flexDirection: "row", justifyContent: "center"}}>
               <Text style={{fontSize: wp("5%"), color: "white"}}>Sending    </Text>
@@ -103,7 +127,7 @@ const styles = StyleSheet.create({
       textInput: {
         borderWidth: 1,
         height: hp("7%"),
-        marginBottom: hp("4%"),
+        marginBottom: hp("3%"),
         paddingLeft: wp("3%"),
         backgroundColor: "whitesmoke",
         borderRadius: 10,
@@ -111,7 +135,7 @@ const styles = StyleSheet.create({
     },
     text:{
 
-      paddingTop: hp("6%"),
+      paddingTop: hp("3%"),
       textAlign: "center",
       color: "green"
     }, 

@@ -120,10 +120,14 @@ export const AuthProvider = (props) => {
      username: "", email: "", phoneNumber: "", receivedOrders: "", goodsUploaded: "", orderMade: "", code: "", passwordMail: ""})
     
 
-    const signup = async(username, email, phoneNumber, password, props) => {
+    const signup = async(username, email, phoneNumber, type, password, props) => {
+      if(!type){
+        
+        return dispatch({type: 'add_error', payload: "Select user type"})
+      }
        
         dispatch({type: 'sending', payload: "loading"})
-        const type = await AsyncStorage.getItem("userType")
+        //const type = await AsyncStorage.getItem("userType")
          
         try{
             const response = await tradeApi.post('/signup', {username, email, password, userType: type, phoneNumber})
@@ -134,6 +138,7 @@ export const AuthProvider = (props) => {
            await AsyncStorage.setItem('username', response.data.username)
            await AsyncStorage.setItem('userType', response.data.userType)
            await AsyncStorage.setItem('Dp', response.data.profilePicture)
+           await AsyncStorage.setItem('aware', "yes")
 
 
            dispatch({type: 'signin', payload: response.data})
@@ -206,7 +211,7 @@ export const AuthProvider = (props) => {
         const userType = await AsyncStorage.getItem('userType')
         const profilePicture = await AsyncStorage.getItem('Dp')
         if (token){
-
+        
         dispatch({type: 'signin', payload: {token, username, userType, profilePicture}})
 
           if(userType === "buyer"){
@@ -218,7 +223,8 @@ export const AuthProvider = (props) => {
 
         }
         else{
-            props.navigation.navigate('UserType')
+            // props.navigation.navigate('Signin')
+            props.navigation.navigate('slider')
         }
     }
 
@@ -228,7 +234,8 @@ export const AuthProvider = (props) => {
          await AsyncStorage.removeItem('userType')
         
         dispatch({type: 'signout'})
-        props.navigation.navigate("UserType")
+      
+        props.navigation.navigate("Signin")
         
     }
 
