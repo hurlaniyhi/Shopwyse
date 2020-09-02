@@ -4,11 +4,12 @@ import { Text, StyleSheet, View, TouchableOpacity, Image, Button, ScrollView ,
 import {SafeAreaView} from 'react-navigation'
 import {Feather} from '@expo/vector-icons'
 
-import {FontAwesome} from '@expo/vector-icons'
+import {FontAwesome, AntDesign} from '@expo/vector-icons'
 import {NavigationEvents} from 'react-navigation'
 
 import AuthContext from "../context/AuthContext"
 import call from 'react-native-phone-call'
+import Modal from 'react-native-modal'
 
 import {
   heightPercentageToDP as hp,
@@ -24,7 +25,7 @@ import * as ImagePicker from 'expo-image-picker'
 
 const Request = (props) => {
 
-  const {state, order, clearErrorMessage, Add_cart} = useContext(AuthContext)
+  const {state, order, clearErrorMessage, Add_cart, StopModal} = useContext(AuthContext)
   
   const data = props.navigation.getParam("data")
 
@@ -79,6 +80,54 @@ const Request = (props) => {
             </View>
             </TouchableOpacity>
         </View> 
+
+        <Modal 
+        isVisible={state.isPoped}
+        onBackdropPress={()=>StopModal()}
+        swipeDirection="right"
+        animationIn="slideInUp" 
+        animationOut="slideOutUp"
+        onSwipeComplete={()=>StopModal()}
+        style={styles.modal}
+    
+        > 
+        <View style={{bottom: hp("9%")}}>
+       <AntDesign name="checkcircle" size={wp("17%")} color = "white" style={{color: "green"}} />
+       <FontAwesome name="circle" size={wp("17%")} color="white" style={{position: "absolute", right: wp("1%"), zIndex: -1}}/>
+        </View>
+          <Text style={{fontSize: wp("7%"), bottom: hp("7%"), color: "green", fontWeight: "bold"}}>Success!</Text>
+          <Text style={{fontSize: wp("4%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%") }}>
+            The product has been ordered!
+          </Text> 
+          <TouchableOpacity style={styles.modaltext} onPress={()=>StopModal()}>
+              <Text style={{color: "white", fontWeight: "bold"}}>OK</Text>
+          </TouchableOpacity>
+        
+        </Modal>
+
+        <Modal 
+        isVisible={state.isCart}
+        onBackdropPress={()=>StopModal()}
+        swipeDirection="right"
+        animationIn="slideInUp" 
+        animationOut="slideOutUp"
+        onSwipeComplete={()=>StopModal()}
+        style={styles.modal}
+    
+        > 
+        <View style={{bottom: hp("9%")}}>
+       <AntDesign name="checkcircle" size={wp("17%")} color = "white" style={{color: "green"}} />
+       <FontAwesome name="circle" size={wp("17%")} color="white" style={{position: "absolute", right: wp("1%"), zIndex: -1}}/>
+        </View>
+          <Text style={{fontSize: wp("7%"), bottom: hp("7%"), color: "green", fontWeight: "bold"}}>Success!</Text>
+          <Text style={{fontSize: wp("4%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%"), textAlign: "center" }}>
+            The product has been added to your cart!
+          </Text> 
+          <TouchableOpacity style={styles.modaltext} onPress={()=>StopModal()}>
+              <Text style={{color: "white", fontWeight: "bold"}}>OK</Text>
+          </TouchableOpacity>
+        
+        </Modal>
      </ScrollView>
     </SafeAreaView>
   )
@@ -183,6 +232,27 @@ const styles = StyleSheet.create({
     
     
   },
+  modaltext: {
+    height: hp("6%"),
+    backgroundColor: "green",
+    width: wp("60%"),
+    justifyContent: "center",
+    alignItems: "center",
+    
+    borderRadius: 10
+    
+  }, 
+  modal: {
+    // justifyContent: "center",
+    alignItems: "center",
+    // height: 50,
+    marginHorizontal: wp("10%"),
+    marginTop: hp("26%"),
+    maxHeight: hp("40%"),
+    backgroundColor: "white",
+    borderRadius: 20,
+    flex: 1
+  }
   
   
 });

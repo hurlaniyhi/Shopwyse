@@ -11,8 +11,9 @@ import UploadProduct from "./src/screens/UploadProduct";
 import SignUp from "./src/screens/SignupScreen";
 import SignIn from "./src/screens/SigninScreen";
 import UserType from "./src/screens/UserType"
-import { Text, StyleSheet, Image, View, ScrollView, TouchableOpacity, Button, ImageBackground, StatusBar } from "react-native";
-//import {Icon, Button, Container, Header,Body, Content, Left} from 'native-base'
+import { Text, StyleSheet, Image, View, ScrollView, Button, TouchableOpacity} from "react-native";
+import {Icon, Text as Wrapper, Container} from 'native-base'
+
 import {SafeAreaView} from 'react-navigation'
 import ResolveAuth from './src/screens/resolveAuth'
 import {FontAwesome5} from '@expo/vector-icons'
@@ -37,6 +38,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
+
 
 // import AppIntroSlider from 'react-native-app-intro-slider'
 
@@ -152,9 +154,10 @@ const switchNavigator = createSwitchNavigator({
   
       return (
      <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "rgba(0, 104, 58, .1)"}}>
-         <View style={{height: hp("30%"),alignItems: 'center', justifyContent: 'center', paddingTop: hp("18%"), paddingBottom: hp("16%")}}>
-           <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontStyle: "italic", fontWeight: "bold", color: "#595757", paddingTop: hp("5%")}}>Buyer</Text>
-           <Image style={styles.image} source={{uri: state.Dp}}/>
+         <View style={{height: hp("38%"),alignItems: 'center', justifyContent: 'center', paddingTop: hp("4%"), backgroundColor: "rgba(47, 101, 66, .8)"}}>
+           <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontStyle: "italic", fontWeight: "bold", color: "white"}}>Buyer</Text>
+           <TouchableOpacity onPress={()=>alert("ok")}><Image style={styles.image} source={{uri: state.Dp}} /></TouchableOpacity>
+
            
          </View>
        <ScrollView>
@@ -174,18 +177,20 @@ const switchNavigator = createSwitchNavigator({
  }, {
   contentComponent: (props) => {
 
-    const {state, clearErrorMessage, fetchGoods} = useContext(AuthContext)
-    console.log(state.Dp)
-
+    const {state} = useContext(AuthContext)
+    
     return (
-   <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "rgba(0, 104, 58, .1)"}}>
-       <View style={{height: hp("30%"),alignItems: 'center', justifyContent: 'center', paddingTop: hp("18%"), paddingBottom: hp("16%")}}>
-       <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontStyle: "italic", fontWeight: "bold", color: "#595757", paddingTop: hp("5%")}}>Seller</Text>
-         <Image style={styles.image} source={{uri: state.Dp}}/>
-         
+   <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "rgba(0, 104, 58, .15)"}}>
+     
+       <View style={{height: hp("38%"),alignItems: 'center', justifyContent: 'center',paddingTop: hp("4%"), backgroundColor: "rgba(47, 101, 66, .9)"}}>
+       
+       <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontStyle: "italic", fontWeight: "bold", color: "white"}}>Seller</Text>
+       <TouchableOpacity onPress={()=>alert("ok")}><Image style={styles.image} source={{uri: state.Dp}} /></TouchableOpacity>
+
+        
        </View>
      <ScrollView>
-       <DrawerItems {...props} />
+        <DrawerItems {...props} />
      </ScrollView>
    </SafeAreaView>
   )}
@@ -213,7 +218,8 @@ const styles = StyleSheet.create({
   image: {
     height: hp("25%"),
     width: wp("50%"),
-    marginHorizontal: wp("25%"),
+    marginLeft: wp("24%"),
+    marginRight: wp("25%"),
     backgroundColor: "whitesmoke",
     borderRadius: 100, 
     marginTop: hp("3%"),

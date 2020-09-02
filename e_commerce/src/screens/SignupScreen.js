@@ -4,6 +4,8 @@ import {SafeAreaView} from 'react-navigation'
 import {Text, Button} from 'react-native-elements'
 import { View } from "native-base";
 import AuthContext from "../context/AuthContext"
+import {FontAwesome, AntDesign} from '@expo/vector-icons'
+import Modal from 'react-native-modal'
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
@@ -13,7 +15,7 @@ import {NavigationEvents} from 'react-navigation'
 
 
 const SignUp = (props) => {
-  const {state, signup, clearErrorMessage} = useContext(AuthContext)
+  const {state, signup, clearErrorMessage, dashboard} = useContext(AuthContext)
     const [username,setUsername] = useState("")
     const [email,setEmail] = useState("")
     const [phoneNumber,setPhoneNumber] = useState("")
@@ -93,7 +95,7 @@ const SignUp = (props) => {
         <TouchableOpacity style={styles.button} onPress={()=>signup(username, email, phoneNumber, userType, password, props)}>
         {!state.submitting ?<Text style={{fontSize: wp("5%"), color: "white"}}>Sign Up</Text> : 
             <View style={{flexDirection: "row", justifyContent: "center"}}>
-              <Text style={{fontSize: wp("5%"), color: "white"}}>Sending    </Text>
+              <Text style={{fontSize: wp("5%"), color: "white"}}>Sending   </Text>
             <ActivityIndicator color="whitesmoke" size="large"/>
             </View> }
         </TouchableOpacity>
@@ -102,6 +104,30 @@ const SignUp = (props) => {
             <Text style={{textAlign: "center", color: "green", paddingTop: hp("2%")}}>Already have an account?   Login in</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal 
+        isVisible={state.isCart}
+        onBackdropPress={()=>dashboard(state.userType, props)}
+        swipeDirection="right"
+        animationIn="slideInUp" 
+        animationOut="slideOutUp"
+        onSwipeComplete={()=>dashboard(state.userType, props)}
+        style={styles.modal}
+    
+        > 
+        <View style={{bottom: hp("9%")}}>
+       <AntDesign name="checkcircle" size={wp("17%")} color = "white" style={{color: "green"}} />
+       <FontAwesome name="circle" size={wp("17%")} color="white" style={{position: "absolute", right: wp("1%"), zIndex: -1}}/>
+        </View>
+          <Text style={{fontSize: wp("7%"), bottom: hp("7%"), color: "green", fontWeight: "bold"}}>Awesome!</Text>
+          <Text style={{fontSize: wp("4.2%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%"), textAlign: "center" }}>
+            Your account has been created!
+          </Text> 
+          <TouchableOpacity style={styles.modaltext} onPress={()=>dashboard(state.userType, props)}>
+              <Text style={{color: "white", fontWeight: "bold", fontSize: wp("4.2%")}}>Dive In</Text>
+          </TouchableOpacity>
+        
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   )
@@ -146,6 +172,27 @@ const styles = StyleSheet.create({
         backgroundColor: "green",
         borderRadius: 10,
         marginTop: hp("2p%")
+    },
+    modaltext: {
+      height: hp("6%"),
+      backgroundColor: "green",
+      width: wp("60%"),
+      justifyContent: "center",
+      alignItems: "center",
+      
+      borderRadius: 10
+      
+    }, 
+    modal: {
+      // justifyContent: "center",
+      alignItems: "center",
+      // height: 50,
+      marginHorizontal: wp("10%"),
+      marginTop: hp("26%"),
+      maxHeight: hp("40%"),
+      backgroundColor: "white",
+      borderRadius: 20,
+      flex: 1
     }
 });
 

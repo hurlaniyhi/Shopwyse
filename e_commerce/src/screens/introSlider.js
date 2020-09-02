@@ -115,7 +115,7 @@ const slides = [
     {
       key: 's3',
       
-      title: 'Lets Dive in...',
+      title: "Let's Dive in...",
       image: require("../../startupImage.jpg"),
       backgroundColor: "rgba(0, 104, 58, .3)",
       titlestyle: styles.last,

@@ -14,7 +14,7 @@ const authReducer = (state, action) => {
     switch (action.type){
       
         case "add_error":
-          console.log(action.payload)
+          
             return {...state, errorMessage: action.payload, submitting: "", carting: ""}
         case "signin":
             return {errorMessage: "", token: action.payload.token, username: action.payload.username, userType: action.payload.userType, Dp: action.payload.profilePicture} 
@@ -30,9 +30,15 @@ const authReducer = (state, action) => {
         case 'change_image':
             return{...state, photo: action.payload, uri: action.payload.uri}
 
+        case 'stop_modal':
+          return{...state, isPoped: false, isCart: false, uri: null}
+
+        case 'cart_popup':
+          return{...state, isCart: true, carting: ""}
+
       
         case 'message':
-            return{...state, errorMessage: "", message: action.payload, submitting: "", carting: ""}
+            return{...state, errorMessage: "", message: action.payload, submitting: "", carting: "", isPoped: true}
 
         case 'clear_product':
             return{...state, errorMessage: "", message: "", photo: null, uri: null}
@@ -97,7 +103,7 @@ const authReducer = (state, action) => {
           return{...state, Dp: action.payload} 
 
         case 'my_profile':
-          console.log(action.payload)
+          
           return{...state, username: action.payload.username, email: action.payload.email, phoneNumber: action.payload.phoneNumber,
              userType: action.payload.userType, receivedOrders: action.payload.receivedOrders, goodsUploaded: action.payload.goodsUploaded, 
              orderMade: action.payload.orderMade } 
@@ -117,7 +123,9 @@ export const AuthProvider = (props) => {
     photo: null, uri: null, goods:[], myRequests: [], requestsToSeller: [], myProducts: [], myCarts: [], myChats: {},  
     pending: 0, completed: 0, carting: "", chatId: "", chatWith: "", chatOwner: "", loadChat: "", day: "", date: "",
      Dp: "https://s3-ap-southeast-2.amazonaws.com/mandela-exhibition/wp-content/uploads/2018/08/location_white-01-01-1024x1024.png", 
-     username: "", email: "", phoneNumber: "", receivedOrders: "", goodsUploaded: "", orderMade: "", code: "", passwordMail: ""})
+     username: "", email: "", phoneNumber: "", receivedOrders: "", goodsUploaded: "", orderMade: "", code: "", passwordMail: "",
+    isPoped: false, isCart: false
+    })
     
 
     const signup = async(username, email, phoneNumber, type, password, props) => {
@@ -140,14 +148,15 @@ export const AuthProvider = (props) => {
            await AsyncStorage.setItem('Dp', response.data.profilePicture)
            await AsyncStorage.setItem('aware', "yes")
 
+           
+           await dispatch({type: 'signin', payload: response.data})
+           await dispatch({type: 'cart_popup'})
 
-           dispatch({type: 'signin', payload: response.data})
-
-           if(response.data.userType === "buyer"){
-            props.navigation.navigate('buyerFlow')
-          }else if(response.data.userType === "seller"){
-            props.navigation.navigate('sellerFlow')
-          }
+          //  if(response.data.userType === "buyer"){
+          //   props.navigation.navigate('buyerFlow')
+          // }else if(response.data.userType === "seller"){
+          //   props.navigation.navigate('sellerFlow')
+          // }
             }
 
          else if(response.data){
@@ -159,6 +168,15 @@ export const AuthProvider = (props) => {
             dispatch({type: 'add_error', payload: "No network connection"})
         }
         
+    }
+
+    const dashboard = async(userType, props) =>{
+      StopModal()
+      if(userType === "buyer"){
+        props.navigation.navigate('buyerFlow')
+      }else if(userType === "seller"){
+        props.navigation.navigate('sellerFlow')
+      }
     }
 
     const signin = async(username, password, props) => {
@@ -277,6 +295,10 @@ export const AuthProvider = (props) => {
 
     const uploadProduct = async (productName, price, photo) => {
 
+      if(!productName || !price || !photo){
+        return alert("Provide all information")
+      }
+
         dispatch({type: 'sending', payload: "loading"})
     
         let cloudname = 'gtbank'
@@ -305,8 +327,9 @@ export const AuthProvider = (props) => {
          const response = await tradeApi.post('/uploadGoods', {imageUrl: data.url, goodName: productName, price: price})
          
          if(response.data === "Successful"){
-            alert("Product succesfully uploaded")
-          await dispatch({type: 'message', payload: "Product succesfully uploaded"})
+            //alert("Product succesfully uploaded")
+          await dispatch({type: 'cart_popup'})
+            dispatch({type: 'message', payload: "Product succesfully uploaded"})
             dispatch({type: 'clear_errorMessage', payload: data.url})
        
       }
@@ -328,6 +351,10 @@ export const AuthProvider = (props) => {
 
 
     const uploadDp = async (photo) => {
+
+      if(!photo){
+        return alert("Provide a selfie picture")
+      }
 
       dispatch({type: 'sending', payload: "loading"})
   
@@ -358,8 +385,9 @@ export const AuthProvider = (props) => {
        const response = await tradeApi.post('/uploadDp', {imageUrl: data.url})
        
        if(response.data === "successful"){
-         alert("Product succesfully uploaded")
-          dispatch({type: 'message', payload: "Product succesfully uploaded"})
+          //alert("Profile picture succesfully uploaded")
+          await dispatch({type: 'cart_popup'})
+          dispatch({type: 'message', payload: "Profile picture succesfully uploaded"})
           await AsyncStorage.setItem('Dp', data.url)
           dispatch({type: 'profile_pics', payload: data.url})
           dispatch({type: 'clear_errorMessage', payload: data.url})
@@ -392,6 +420,10 @@ export const AuthProvider = (props) => {
 
 
    const editProduct = async (id, image_url, likes, likeColor, goodName, price) => {
+
+    if(!image_url || !goodName || !price){
+      alert("Provide all information")
+    }
         
     dispatch({type: 'sending', payload: "loading"})
     
@@ -399,7 +431,8 @@ export const AuthProvider = (props) => {
     const response = await tradeApi.post('/updateGoods', {id, image_url, likes, likeColor, goodName, price})
          
     if(response.data === "success"){
-      alert("Product succesfully updated")
+      //alert("Product succesfully updated")
+      dispatch({type: 'cart_popup'})
        dispatch({type: 'message', payload: "Product succesfully updated"})
        
        fetchMyGoods()
@@ -431,7 +464,7 @@ export const AuthProvider = (props) => {
     const response = await tradeApi.post('/request', {imageUrl, goodName, ownerName, price, ownerPhoneNumber})
          
          if(response.data.request){
-           alert("You've Successfully ordered this product")
+           //alert("You've Successfully ordered this product")
             dispatch({type: 'message', payload: "You've Successfully ordered this product"})
        
       }
@@ -448,6 +481,9 @@ export const AuthProvider = (props) => {
     
 }
 
+const StopModal = async() =>{
+  dispatch({type: 'stop_modal'})
+}
 
 
 const Add_cart = async (imageUrl, goodName, ownerName, price, phoneNumber) => {
@@ -457,8 +493,8 @@ const Add_cart = async (imageUrl, goodName, ownerName, price, phoneNumber) => {
     const response = await tradeApi.post('/addCart', {imageUrl, goodName, ownerName, price, phoneNumber})
          
          if(response.data.cart){
-           alert("You've Successfully Added this product to your cart")
-            dispatch({type: 'message', payload: "You've Successfully Added this product to your cart"})
+          // alert("You've Successfully Added this product to your cart")
+            dispatch({type: 'cart_popup'})
        
       }
         
@@ -580,7 +616,7 @@ const changePassword = async (code, password, props) => {
          if(response.data){
              
             
-            dispatch({type: 'allgoods', payload: response.data})
+           await dispatch({type: 'allgoods', payload: response.data})
       }
     }
       catch(err){
@@ -918,7 +954,9 @@ const addId2 = async (id, chatWith, requestor, props) => {
         forgetPassword,
         changePassword,
         stopLoading,
-        updateLikes
+        updateLikes,
+        StopModal,
+        dashboard
         
     }
     
