@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from "react-native";
+import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Picker } from "react-native";
 import {SafeAreaView} from 'react-navigation'
 import {Entypo} from '@expo/vector-icons'
 import AuthContext from "../context/AuthContext"
@@ -21,6 +21,8 @@ const EditProduct = (props) => {
 
   const [productName, setProductName] = useState(variab.goodName)
   const [price, setPrice] = useState(variab.price)
+  const [category, setCategory] = useState(variab.category)
+  const [color, setColor] = useState("black")
   
   
   const {state, clearErrorMessage, editProduct, clearUploadProduct, StopModal} = useContext(AuthContext)
@@ -33,6 +35,13 @@ const EditProduct = (props) => {
   
  }
  
+ const selectChange = (item) => {
+  setCategory(item)
+  setColor("black")
+  if(item == ""){
+    setColor("#C3C3C3")
+  }
+}
  
 
   return (
@@ -58,14 +67,29 @@ const EditProduct = (props) => {
                 placeholder="Enter Product Price"
                 onChangeText={(newValue)=> setPrice(newValue)}
             />
+
+        <View style={styles.textInput}>    
+          <Picker 
+            selectedValue={category}
+            style={{color: color}}
+            onValueChange={(itemValue) =>selectChange(itemValue)}
+            placeholder={{label: "Great", value: "yea"}}
+    
+          >
+         <Picker.Item label="Select category" value=""/>
+         <Picker.Item label="Electronics" value="electronics"/>
+         <Picker.Item label="Wears" value="wears" />
+         <Picker.Item label="Others" value="others" />
+         </Picker>
+      </View>
     
      <View style={styles.container}>
        <Image style={styles.image} source={{uri: variab.image}} />
-       
+        
       </View>
      
      
-      <TouchableOpacity style={styles.button} onPress={()=>editProduct(variab.id, variab.image, variab.likes, variab.likeColor, productName, price)}>
+      <TouchableOpacity activeOpacity={.8} style={styles.button} onPress={()=>editProduct(variab.id, variab.image, variab.likes, variab.likeColor, productName, price, category)}>
             {!state.submitting ?<Text style={{fontSize: wp("5%"), color: "white"}}>Update Product</Text> : 
             <View style={{flexDirection: "row", justifyContent: "center"}}>
               <Text style={{fontSize: wp("5%"), color: "white"}}>Updating    </Text>  
@@ -91,7 +115,7 @@ const EditProduct = (props) => {
           <Text style={{fontSize: wp("4.5%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%"), textAlign: "center" }}>
             Product has been updated!
           </Text> 
-          <TouchableOpacity style={styles.modaltext} onPress={()=>done()}>
+          <TouchableOpacity activeOpacity={.8} style={styles.modaltext} onPress={()=>done()}>
               <Text style={{color: "white", fontWeight: "bold", fontSize: wp("4.2%")}}>OK</Text>
           </TouchableOpacity>
         
@@ -112,8 +136,8 @@ const styles = StyleSheet.create({
     fontSize: wp("7%"),
     textAlign: "center",
     fontWeight: "bold",
-    paddingTop: hp("3%"),
-    paddingBottom: hp("5%"),
+    paddingTop: hp("1.5%"),
+    paddingBottom: hp("3%"),
     color: "green"
   },
   image: {

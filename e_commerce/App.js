@@ -33,6 +33,7 @@ import ChangePassword from "./src/screens/ChangePassword"
 import SellerHome from "./src/screens/SellerHome"
 import {AsyncStorage} from 'react-native'
 import App1 from "./src/screens/introSlider"
+import ViewDP from "./src/screens/viewDp"
 
 import {
   heightPercentageToDP as hp,
@@ -48,7 +49,8 @@ import {
 
 const drawer = createStackNavigator({   // we did this instead of using what we commented out at the bottom so as to have access to the styling options
   home: HomeScreen,
-  Request: Request
+  Request: Request,
+  MyDp: ViewDP,
  
 })
 
@@ -59,7 +61,8 @@ drawer.navigationOptions = {
 }
 
 const sellerdrawer = createStackNavigator({   // we did this instead of using what we commented out at the bottom so as to have access to the styling options
-  home: SellerHome
+  home: SellerHome,
+  MyDp: ViewDP,
  
 })
 
@@ -119,7 +122,7 @@ const drawer5 = createStackNavigator({
 
 drawer5.navigationOptions = {
   drawerIcon: ({tintColor})=><FontAwesome color={tintColor} name="shopping-cart" size={20}/>,
-  title: "My Carts"
+  title: "My Carts",
   
 }
 
@@ -130,6 +133,7 @@ const switchNavigator = createSwitchNavigator({
   autoSignin: ResolveAuth,
   //UserType: UserType,
   slider: App1,
+ 
 
 
   loginFlow: createStackNavigator({
@@ -143,25 +147,26 @@ const switchNavigator = createSwitchNavigator({
      Home: drawer,
      myRequests: drawer2,
      Carts: drawer5,
-     change_profile_picture: ProfilePicture,
+    // change_profile_picture: ProfilePicture,
      LogOutProfile: Logout
   },
   {
     contentComponent: (props) => {
   
-      const {state, clearErrorMessage, fetchGoods} = useContext(AuthContext)
+      const {state, clearErrorMessage, fetchGoods, chooseDp} = useContext(AuthContext)
       console.log(state.Dp)
   
       return (
-     <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "rgba(0, 104, 58, .1)"}}>
-         <View style={{height: hp("38%"),alignItems: 'center', justifyContent: 'center', paddingTop: hp("4%"), backgroundColor: "rgba(47, 101, 66, .8)"}}>
+     <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "white"}}>
+         <View style={{height: hp("38%"),alignItems: 'center', justifyContent: 'center', paddingTop: hp("4%"), backgroundColor: "rgba(47, 101, 66, .9)"}}>
            <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontStyle: "italic", fontWeight: "bold", color: "white"}}>Buyer</Text>
-           <TouchableOpacity onPress={()=>alert("ok")}><Image style={styles.image} source={{uri: state.Dp}} /></TouchableOpacity>
-
-           
+           <View style={{flexDirection: "row", alignItems: "center"}}>
+           <TouchableOpacity activeOpacity={.7} onPress={()=>props.navigation.navigate("MyDp")}><Image style={styles.image} source={{uri: state.Dp}} /></TouchableOpacity>
+          <TouchableOpacity activeOpacity={.7} style={styles.alert} onPress={()=>chooseDp(props)}><FontAwesome  size = {20} name="camera" color="green"/></TouchableOpacity>
+           </View>
          </View>
        <ScrollView>
-         <DrawerItems {...props} />
+         <DrawerItems activeTintColor="rgba(47, 101, 66, .9)" {...props} />
        </ScrollView>
      </SafeAreaView>
     )}
@@ -172,25 +177,33 @@ const switchNavigator = createSwitchNavigator({
     requestToSeller: drawer3,
     SellerGoods: drawer4,
     Upload_Product: UploadProduct,
-    change_profile_picture: ProfilePicture,
+    //change_profile_picture: ProfilePicture,
     LogOut: Logout
  }, {
   contentComponent: (props) => {
 
-    const {state} = useContext(AuthContext)
-    
+    const {state, chooseDp} = useContext(AuthContext)
+
+
+    //backgroundColor:  "rgba(0, 104, 58, .15)"
+    //backgroundColor:  "rgba(47, 101, 66, .4)"
     return (
-   <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "rgba(0, 104, 58, .15)"}}>
+   <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor:  "white"}}>
      
        <View style={{height: hp("38%"),alignItems: 'center', justifyContent: 'center',paddingTop: hp("4%"), backgroundColor: "rgba(47, 101, 66, .9)"}}>
        
-       <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontStyle: "italic", fontWeight: "bold", color: "white"}}>Seller</Text>
-       <TouchableOpacity onPress={()=>alert("ok")}><Image style={styles.image} source={{uri: state.Dp}} /></TouchableOpacity>
-
+       <Text style={{textAlign: "center", fontSize: wp("4.5%"), fontWeight: "bold", color: "white"}}>Seller</Text>
+       <View style={{flexDirection: "row", alignItems: "center"}}>
+           <TouchableOpacity activeOpacity={.7} onPress={()=>props.navigation.navigate("MyDp")}><Image style={styles.image} source={{uri: state.Dp}} /></TouchableOpacity>
+          <TouchableOpacity activeOpacity={.7} style={styles.alert} onPress={()=>chooseDp(props)}><FontAwesome  size = {20} name="camera" color="green"/></TouchableOpacity>
+        </View>
         
        </View>
      <ScrollView>
-        <DrawerItems {...props} />
+        <DrawerItems activeTintColor="rgba(47, 101, 66, .9)" labelStyle= {{
+         //fontSize: 15,
+         fontWeight: "bold",
+      }} {...props} />
      </ScrollView>
    </SafeAreaView>
   )}
@@ -211,6 +224,28 @@ const switchNavigator = createSwitchNavigator({
   // backBehavior: "history"
 
 
+//   {... /drawer items}
+//  ,
+//   {
+//     contentOptions: {
+//       activeTintColor: colors.primary,
+//       activeBackgroundColor: 'transparent',
+//       inactiveTintColor: 'black',
+//       inactiveBackgroundColor: 'transparent',
+//       labelStyle: {
+//         fontSize: 15,
+//         marginLeft: 10,
+//       },
+//     },
+//     drawerWidth: SCREEN_WIDTH * 0.7,
+//     drawerOpenRoute: 'DrawerOpen',
+//     drawerCloseRoute: 'DrawerClose',
+//     drawerToggleRoute: 'DrawerToggle',
+//   }
+// );
+
+
+
 
 
 const styles = StyleSheet.create({
@@ -218,14 +253,33 @@ const styles = StyleSheet.create({
   image: {
     height: hp("25%"),
     width: wp("50%"),
-    marginLeft: wp("24%"),
-    marginRight: wp("25%"),
+    marginLeft: wp("39%"),
+    // marginLeft: wp("24%")
+    // marginRight: wp("25%"),
     backgroundColor: "whitesmoke",
     borderRadius: 100, 
     marginTop: hp("3%"),
     marginBottom: hp("7%")
     
   },
+
+  alert:{
+    backgroundColor: "white",
+    color: "white",
+    marginLeft: wp("31%"),  
+    width: wp("11%"),
+    height: hp("5.5%"),  
+    borderRadius: 100, 
+    alignItems: "center",
+    justifyContent: "center",
+    right: wp("45%"),
+    top: hp("7%")
+    
+    //
+    //bottom: hp("6%")  
+      
+  },
+
 
 })
 

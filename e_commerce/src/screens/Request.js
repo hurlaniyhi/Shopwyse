@@ -50,7 +50,7 @@ const Request = (props) => {
               <Text style={{alignSelf: "center", color: "white", fontSize: wp("6%")}}>{`NGN ${data.price}`}</Text>
           </View>
           <View style={{flexDirection: "row"}}>
-            <TouchableOpacity onPress={()=> Add_cart(data.image, data.goodName, data.ownerName, data.price, data.phoneNumber)}>
+            <TouchableOpacity activeOpacity={.8} onPress={()=> Add_cart(data.image, data.goodName, data.ownerName, data.price, data.phoneNumber)}>
             <View style={styles.cart}>
             {!state.carting ?<View style={{flexDirection:"row"}}>
               <FontAwesome name="shopping-cart" size={25} style={{color: "white", alignSelf: "center"}}/>
@@ -61,7 +61,7 @@ const Request = (props) => {
           </View> }
             </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> order(data.image, data.goodName, data.ownerName, data.price, data.phoneNumber)}>
+            <TouchableOpacity activeOpacity={.8} onPress={()=> order(data.image, data.goodName, data.ownerName, data.price, data.phoneNumber)}>
             <View style={styles.request}>
             {!state.submitting ?<View style={{flexDirection:"row"}}>
                 <FontAwesome name="shopping-bag" size={25} style={{color: "white", alignSelf: "center"}}/>
@@ -73,7 +73,7 @@ const Request = (props) => {
             </View>
             </TouchableOpacity>
            </View>
-           <TouchableOpacity onPress={()=> callme(data.phoneNumber)}>
+           <TouchableOpacity activeOpacity={.8} onPress={()=> callme(data.phoneNumber)}>
            <View style={styles.call}>
             <Feather name="phone-call" size={30} style={{color: "green", alignSelf: "center"}}/>
               <Text style={{alignSelf: "center", color: "green", fontSize: wp("5%"), fontWeight: "bold", paddingLeft: wp("6%")}}>Call Seller</Text>
@@ -99,7 +99,7 @@ const Request = (props) => {
           <Text style={{fontSize: wp("4%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%") }}>
             The product has been ordered!
           </Text> 
-          <TouchableOpacity style={styles.modaltext} onPress={()=>StopModal()}>
+          <TouchableOpacity activeOpacity={.8} style={styles.modaltext} onPress={()=>StopModal()}>
               <Text style={{color: "white", fontWeight: "bold"}}>OK</Text>
           </TouchableOpacity>
         
@@ -123,7 +123,7 @@ const Request = (props) => {
           <Text style={{fontSize: wp("4%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%"), textAlign: "center" }}>
             The product has been added to your cart!
           </Text> 
-          <TouchableOpacity style={styles.modaltext} onPress={()=>StopModal()}>
+          <TouchableOpacity activeOpacity={.8} style={styles.modaltext} onPress={()=>StopModal()}>
               <Text style={{color: "white", fontWeight: "bold"}}>OK</Text>
           </TouchableOpacity>
         

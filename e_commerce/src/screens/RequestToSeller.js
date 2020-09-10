@@ -117,12 +117,12 @@ const RequestToSeller = (props) => {
 
           <View style={{flexDirection: "row"}}>
          
-            <TouchableOpacity style={styles.date} onPress={()=>callme(item.requestorPhoneNumber)}>
+            <TouchableOpacity activeOpacity={.8} style={styles.date} onPress={()=>callme(item.requestorPhoneNumber)}>
               <Feather name="phone-call" size={25} style={{color: "green", alignSelf: "center", marginLeft: wp("3%")}}/>
               <Text style={{alignSelf: "center", color: "green", fontSize: wp("4%"), fontWeight: "bold", paddingLeft: wp("5%")}}>Call</Text>
             </TouchableOpacity>
             <View>
-            <TouchableOpacity style={styles.date} onPress={()=>addId2(item._id, item.ownerName, item.requestorName, props)}>
+            <TouchableOpacity activeOpacity={.8} style={styles.date} onPress={()=>addId2(item._id, item.ownerName, item.requestorName, props)}>
               <Entypo name="chat" size={25} style={{color: "green", alignSelf: "center",  marginLeft: wp("3%")}}/>
               <Text style={{alignSelf: "center", color: "green", fontSize: wp("4%"), fontWeight: "bold", paddingLeft: wp("5%")}}>Chat</Text>
             </TouchableOpacity>

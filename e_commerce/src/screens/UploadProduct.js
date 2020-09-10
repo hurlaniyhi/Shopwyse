@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from "react-native";
+import { Text, StyleSheet, View, Image, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Picker } from "react-native";
 import {SafeAreaView} from 'react-navigation'
 import {Entypo} from '@expo/vector-icons'
 import AuthContext from "../context/AuthContext"
@@ -18,6 +18,8 @@ const UploadProduct = ({navigation}) => {
 
   const [productName, setProductName] = useState("")
   const [price, setPrice] = useState("")
+  const [category, setCategory] = useState("")
+  const [color, setColor] = useState("#C3C3C3")
   
   
   const {state, clearErrorMessage, selectImage, uploadProduct, clearUploadProduct, StopModal} = useContext(AuthContext)
@@ -26,8 +28,16 @@ const UploadProduct = ({navigation}) => {
   StopModal()
   setProductName("")
   setPrice("")
+  setCategory("")
  }
  
+ const selectChange = (item) => {
+  setCategory(item)
+  setColor("black")
+  if(item == ""){
+    setColor("#C3C3C3")
+  }
+}
  
 
   return (
@@ -42,7 +52,7 @@ const UploadProduct = ({navigation}) => {
                 autoCorrect={false} 
                 placeholder="Enter Product Name"
                 value={productName}
-                onChangeText={(newValue)=> setProductName(newValue)}
+                onChangeText={(newValue)=> setProductName(newValue)}  
             />
        <TextInput 
                 keyboardType="numeric"
@@ -53,14 +63,30 @@ const UploadProduct = ({navigation}) => {
                 value={price}
                 onChangeText={(newValue)=> setPrice(newValue)}
             />
+
+
+        <View style={styles.textInput}>    
+          <Picker 
+            selectedValue={category}
+            style={{color: color}}
+            onValueChange={(itemValue) =>selectChange(itemValue)}
+            placeholder={{label: "Great", value: "yea"}}
     
-     <TouchableOpacity style={styles.container} onPress={selectImage}>
+          >
+      <Picker.Item label="Select category" value=""/>
+      <Picker.Item label="Electronics" value="electronics"/>
+      <Picker.Item label="Wears" value="wears" />
+      <Picker.Item label="Others" value="others" />
+    </Picker>
+    </View>
+    
+     <TouchableOpacity activeOpacity={.8} style={styles.container} onPress={selectImage}>
        {state.uri ?<Image style={styles.image} source={{uri: state.uri}} /> : 
        <Text style={{fontSize: wp("4%"), fontWeight: "bold", fontStyle: "italic", color: "#797979"}}>Tap to select the product image</Text>}
       </TouchableOpacity>
       
      
-      <TouchableOpacity style={styles.button} onPress={()=>uploadProduct(productName, price, state.photo)}>
+      <TouchableOpacity activeOpacity={.8} style={styles.button} onPress={()=>uploadProduct(productName, price, state.photo, category)}>
             {!state.submitting ?<Text style={{fontSize: wp("5%"), color: "white"}}>Upload Product</Text> : 
             <View style={{flexDirection: "row", justifyContent: "center"}}>
               <Text style={{fontSize: wp("5%"), color: "white"}}>Uploading    </Text>
@@ -86,7 +112,7 @@ const UploadProduct = ({navigation}) => {
           <Text style={{fontSize: wp("4.5%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%"), textAlign: "center" }}>
             Product has been uploaded!
           </Text> 
-          <TouchableOpacity style={styles.modaltext} onPress={()=>done()}>
+          <TouchableOpacity activeOpacity={.8} style={styles.modaltext} onPress={()=>done()}>
               <Text style={{color: "white", fontWeight: "bold", fontSize: wp("4.2%")}}>OK</Text>
           </TouchableOpacity>
         
@@ -107,8 +133,8 @@ const styles = StyleSheet.create({
     fontSize: wp("7%"),
     textAlign: "center",
     fontWeight: "bold",
-    paddingTop: hp("3%"),
-    paddingBottom: hp("5%"),
+    paddingTop: hp("1%"),
+    paddingBottom: hp("3%"),
     color: "green"
   },
   image: {
@@ -141,12 +167,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: hp("7%"),
     marginBottom: hp("2%"),
-    paddingLeft: wp("3%"),
+    paddingLeft: wp("4%"),
     backgroundColor: "whitesmoke",
     borderRadius: 10,
     marginHorizontal: wp("10%"),
     borderColor: "#C3C3C3",
-    textAlign: "center"
+    // textAlign: "center"
 },
 modaltext: {
   height: hp("6%"),

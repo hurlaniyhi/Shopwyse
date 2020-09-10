@@ -64,7 +64,7 @@ const MyCarts = (props) => {
             <FontAwesome name="trash-o" size={27} style={{marginLeft: wp("1%"), color: "#595757"}}/>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={()=>props.navigation.navigate("Request",{
+          <TouchableOpacity activeOpacity={.8} onPress={()=>props.navigation.navigate("Request",{
             data: {
               id: item._id,
               image: item.image,
@@ -128,21 +128,23 @@ const styles = StyleSheet.create({
   image: {
     marginTop: hp("1%"),
     marginBottom: hp("1%"),
-    width: wp("78%"),
-    height: hp("50%"),
+    // width: wp("78%"),
+    // height: hp("50%"),
+    width: wp("65%"),
+    height: hp("45%"),
     marginHorizontal: wp("3%"),
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12
   },
   title: {
-    marginLeft: wp("7.5%"),
-    marginRight: wp("7.5%"), 
+    marginLeft: wp("14.5%"),
+    marginRight: wp("14.5%"), 
     backgroundColor: "rgba(238,238,238, 0.6)", 
     marginTop: hp("2p%"),
-    marginBottom: hp("2%"), 
+    marginBottom: hp("3%"), 
     borderRadius: 12,
-    height: hp("67%"),
-    width: wp("85%")
+    //height: hp("67%"),
+    width: wp("71%")
   }, 
   price:{
     height: hp("6%"), 
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
    backgroundColor: "#797979",
     borderWidth: 1,
-    width: wp("78%"),
+    width: wp("65%"),
     justifyContent: "center",
     marginBottom: hp("2p%"),
     marginHorizontal: wp("3%"),

@@ -66,7 +66,8 @@ const SellerGoods = (props) => {
               goodName: item.goodName,
               price: item.price,
               likes: item.likes,
-              likeColor: item.likeColor
+              likeColor: item.likeColor,
+              category: item.category
             }
           })}>
           <EvilIcons name="pencil" size={40} style={{marginLeft: wp("3%"), color: "#595757"}}/>

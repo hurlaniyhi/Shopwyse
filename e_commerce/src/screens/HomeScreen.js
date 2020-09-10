@@ -1,7 +1,7 @@
 import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, Button, ScrollView ,
    FlatList, ImageBackground, ActivityIndicator} from "react-native";
-import {SafeAreaView} from 'react-navigation'
+import {SafeAreaView, SceneView} from 'react-navigation'
 import {Feather, AntDesign, FontAwesome5} from '@expo/vector-icons'
 import tradeApi from "../API/tradeApi"
 import AuthContext from "../context/AuthContext"
@@ -13,6 +13,7 @@ import {
 } from 'react-native-responsive-screen'
 
 import io from "socket.io-client"
+import {AsyncStorage} from 'react-native'
 
 // use expo install expo-image-picker  to install expo image picker
 //import * as ImagePicker from 'expo-image-picker'
@@ -21,11 +22,14 @@ import io from "socket.io-client"
 
 const HomeScreen = (props) => {
 
-  const {state, clearErrorMessage, fetchGoods, updateLikes} = useContext(AuthContext)
-  const [date, setDate] = useState("")
+  const {state, clearErrorMessage, fetchGoods} = useContext(AuthContext)
+  //const [date, setDate] = useState(require("../../startupImage.jpg"))
+  
 
-  const sendlike = () => {
+  
 
+  const sendlike = async() => {
+    
     socket = io("https://shopwyse-backend.herokuapp.com")
 
     // socket.on('connect', function() {
@@ -35,6 +39,8 @@ const HomeScreen = (props) => {
     socket.on("likes", msg => {
       fetchGoods()
     })
+
+   
 
   }
 
@@ -55,27 +61,47 @@ const HomeScreen = (props) => {
   return (
     <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
       <NavigationEvents onWillFocus={fetchGoods}/>
-    <ScrollView>
-
+    
+    
     <View style={styles.container}>
-    <ImageBackground style={{flex: 1, height: hp("25%"), width: wp("96%"), marginHorizontal: wp("2%"), marginTop: hp("1%")}} 
+    {!state.imageSwitch ? <ImageBackground style={{height: hp("30%"), width: wp("100%"), marginHorizontal: wp("0%"), marginTop: hp("0%")}} 
      source={require("../../startupImage.jpg")}>
       <View style={styles.overlay}>
       <Text style={styles.text}>{`Good ${state.day} ${state.username}`}</Text>
-  <Text style={[styles.text, {fontSize: wp("3.5%"), paddingTop: hp("4%")}]}>{state.date}</Text>
+  <Text style={[styles.text, {fontSize: wp("3.5%"), paddingTop: hp("2%")}]}>{state.date}</Text>
       </View>
-      </ImageBackground>
+      </ImageBackground>: 
+      <ImageBackground style={{height: hp("30%"), width: wp("100%"), marginHorizontal: wp("0%"), marginTop: hp("0%")}} 
+      source={state.imageSwitch}>
+       <View style={styles.overlay}>
+       <Text style={styles.text}>{`Good ${state.day} ${state.username}`}</Text>
+   <Text style={[styles.text, {fontSize: wp("3.5%"), paddingTop: hp("2%")}]}>{state.date}</Text>
+       </View>
+       </ImageBackground>
+      }
     </View>
     
 
-   {!state.goods ? <ActivityIndicator size="large" style={{marginTop: 200}} /> : <FlatList
-    data={state.goods}
+   {!state.goods ? <ActivityIndicator size="large" style={{marginTop: 200, transform: [{scale: 1.5}]}} /> : 
+   <View style={{flex: 1, bottom: hp("4%"), 
+   backgroundColor: "whitesmoke", borderTopLeftRadius: 35, 
+   borderTopRightRadius: 35, marginHorizontal: wp("0.4"), overflow: "hidden"}}>
+     <Text style={{height: hp("1%")}}></Text>
+   <ScrollView>
+   {state.categoryOne.length == 0 ? null : 
+<>  
+   <Text style={{fontWeight: "bold", fontSize: wp("5.5%"), 
+   textAlign: "center"}}>Electronics
+   </Text>  
+   <FlatList
+    data={state.categoryOne}
     horizontal
+    showsHorizontalScrollIndicator={false}
     keyExtractor={(item) => item._id}
     renderItem={({item}) => {
       return (
         <View style={styles.title}>
-          <TouchableOpacity onPress={()=> props.navigation.navigate('Request', {
+          <TouchableOpacity activeOpacity={.8}  onPress={()=> props.navigation.navigate('Request', {
             data: {
               id: item._id,
               price: item.price,
@@ -86,22 +112,122 @@ const HomeScreen = (props) => {
             }
           })}>
           <Image style={styles.image} source={{uri: item.image}} /> 
-          <Text style={{textAlign: "center", color: "green", fontSize: wp("5%")}}>{item.goodName}</Text>
-          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("6%")}}>{`NGN ${item.price}`}</Text></View>
+          {item.goodName.length <= 13 ? 
+         <Text style={{textAlign: "center", color: "green", fontSize: wp("4%")}}>{item.goodName}</Text> :
+         <Text style={{textAlign: "center", color: "green", fontSize: wp("4%")}}>{`${item.goodName.substring(0,13)}...`}</Text>
+         }
+          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("4%")}}>{`NGN ${item.price}`}</Text></View>
           </TouchableOpacity>
           <View style={{flexDirection: "row"}}>
             <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
             <TouchableOpacity onPress={()=> updateLike(item._id)}>
-            {item.likeColor != "red" ? <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("37%")}} size={30} /> : 
-            <AntDesign name="heart" style={{color: "red", marginLeft: wp("37%")}} size={30} />}
+            {item.likeColor != "red" ? <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("3%")}} size={20} /> : 
+            <AntDesign name="heart" style={{color: "red", marginLeft: wp("3%")}} size={20} />}
             </TouchableOpacity>
           </View>
         </View>
       )
     }}
-  /> }
+  />
+  </>
+}
+
+{state.categoryTwo.length == 0 ? null : 
+<>
+   <Text style={{fontWeight: "bold", fontSize: wp("5.5%"), 
+   textAlign: "center", marginTop: hp("2.5%")}}>
+     Clothes & Other wears
+   </Text>  
+  <FlatList
+    data={state.categoryTwo}
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    keyExtractor={(item) => item._id}
+    renderItem={({item}) => {
+      return (
+        <View style={styles.title}>
+          <TouchableOpacity activeOpacity={.8}  onPress={()=> props.navigation.navigate('Request', {
+            data: {
+              id: item._id,
+              price: item.price,
+              goodName: item.goodName,
+              ownerName: item.ownerName,
+              phoneNumber: item.phoneNumber,
+              image: item.image
+            }
+          })}>
+          <Image style={styles.image} source={{uri: item.image}} /> 
+          {item.goodName.length <= 13 ? 
+         <Text style={{textAlign: "center", color: "green", fontSize: wp("4%")}}>{item.goodName}</Text> :
+         <Text style={{textAlign: "center", color: "green", fontSize: wp("4%")}}>{`${item.goodName.substring(0,13)}...`}</Text>
+         }
+          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("4%")}}>{`NGN ${item.price}`}</Text></View>
+          </TouchableOpacity>
+          <View style={{flexDirection: "row"}}>
+            <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
+            <TouchableOpacity onPress={()=> updateLike(item._id)}>
+            {item.likeColor != "red" ? <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("3%")}} size={20} /> : 
+            <AntDesign name="heart" style={{color: "red", marginLeft: wp("3%")}} size={20} />}
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    }}
+  />
+  </>
+}
+
+
+{state.categoryThree.length == 0 ? null : 
+<>
+<Text style={{fontWeight: "bold", fontSize: wp("5.5%"), 
+   textAlign: "center", marginTop: hp("2.5%")}}>
+     Others 
+   </Text>  
+  <FlatList
+    data={state.categoryThree}
+    horizontal
+    showsHorizontalScrollIndicator={false}
+    keyExtractor={(item) => item._id}
+    renderItem={({item}) => {
+      return (
+        <View style={styles.title}>
+          <TouchableOpacity activeOpacity={.8}  onPress={()=> props.navigation.navigate('Request', {
+            data: {
+              id: item._id,
+              price: item.price,
+              goodName: item.goodName,
+              ownerName: item.ownerName,
+              phoneNumber: item.phoneNumber,
+              image: item.image
+            }
+          })}>
+          <Image style={styles.image} source={{uri: item.image}} /> 
+          {item.goodName.length <= 13 ? 
+         <Text style={{textAlign: "center", color: "green", fontSize: wp("4%")}}>{item.goodName}</Text> :
+         <Text style={{textAlign: "center", color: "green", fontSize: wp("4%")}}>{`${item.goodName.substring(0,13)}...`}</Text>
+         }
+          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("4%")}}>{`NGN ${item.price}`}</Text></View>
+          </TouchableOpacity>
+          <View style={{flexDirection: "row"}}>
+            <Text style={{color: "#C4C2C2", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
+            <TouchableOpacity onPress={()=> updateLike(item._id)}>
+            {item.likeColor != "red" ? <AntDesign name="hearto" style={{color: "#C4C2C2", marginLeft: wp("3%")}} size={20} /> : 
+            <AntDesign name="heart" style={{color: "red", marginLeft: wp("3%")}} size={20} />}
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    }}
+  />
+  </>
+}
+
+  </ScrollView>
+  </View>
+  }
     
-     </ScrollView>
+    
     </SafeAreaView>
   )
 };
@@ -129,25 +255,20 @@ const styles = StyleSheet.create({
   text: {
     fontSize: wp("7%"),
     paddingTop: hp("0%"),
-    color: "white"
+    color: "white",
+    backgroundColor: "rgba(0, 104, 58, .3)"
   },
   container: {
     
-    // height: hp("22%"),
-    
    
-    // borderColor: "#C3C3C3",
-    // justifyContent: "center", 
-    // alignItems: "center",
-    // borderBottomLeftRadius: 80,
     borderTopWidth: 1,
     borderColor: "white"
   },
   image: {
     
-    marginBottom: hp("1%"),
-    width: wp("70%"),
-    height: hp("40%"),
+    marginBottom: hp("0.5%"),
+    width: wp("37%"),
+    height: hp("20%"),
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12
   },
@@ -155,21 +276,25 @@ const styles = StyleSheet.create({
     marginLeft: wp("2%"),
     marginRight: wp("2%"), 
     backgroundColor: "white", 
-    marginTop: hp("6p%"), 
+    marginTop: hp("1.5%"), 
     borderRadius: 12,
-    height: hp("59%"),
-    width: wp("70%")
+    //height: hp("59%"),
+    borderWidth: 1,
+    borderColor: "rgba(196,194,194,0.4)",
+    width: wp("37%"),
+    flex: 1
   }, 
   price:{
-    height: hp("6%"), 
+    //height: hp("4%"), 
     borderColor: "#C3C3C3",
     borderRadius: 10,
    backgroundColor: "#797979",
     borderWidth: 1,
-    width: wp("70%"),
+    marginHorizontal: wp("1%"),
+    width: wp("35%"),
     justifyContent: "center",
-    marginBottom: hp("2p%"),
-    marginTop: hp("1%")
+    marginBottom: hp("1p%"),
+    marginTop: hp("0.5%")
   },
   overlay: {
     flex: 1,

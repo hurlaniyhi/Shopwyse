@@ -28,10 +28,17 @@ const authReducer = (state, action) => {
             return{token: null, errorMessage: ""}
         
         case 'change_image':
+         
             return{...state, photo: action.payload, uri: action.payload.uri}
 
         case 'stop_modal':
-          return{...state, isPoped: false, isCart: false, uri: null}
+          return{...state, isPoped: false, isCart: false, uri: null, photo: null, dpMessage: false}
+
+        case 'start_modal':
+          return{...state, isCart: true}
+
+        case 'dp_message':
+          return{...state, dpMessage: true}
 
         case 'cart_popup':
           return{...state, isCart: true, carting: ""}
@@ -44,7 +51,8 @@ const authReducer = (state, action) => {
             return{...state, errorMessage: "", message: "", photo: null, uri: null}
 
         case 'allgoods':
-            return{...state, errorMessage: "", message: "", goods: action.payload}
+            return{...state, errorMessage: "", message: "", goods: action.payload, categoryOne: action.payload.categoryOne, 
+            categoryTwo: action.payload.categoryTwo, categoryThree: action.payload.categoryThree}
 
         case 'stopLoad':
             return{...state, loadChat: ""}
@@ -71,6 +79,10 @@ const authReducer = (state, action) => {
         case 'fetched_chats':
             
             return{...state, errorMessage: "", message: "", myChats: action.payload, loadChat: ""}
+
+        case 'image_switch':
+            
+            return{...state, imageSwitch: action.payload}
 
 
         case 'clear_myChats':
@@ -124,7 +136,7 @@ export const AuthProvider = (props) => {
     pending: 0, completed: 0, carting: "", chatId: "", chatWith: "", chatOwner: "", loadChat: "", day: "", date: "",
      Dp: "https://s3-ap-southeast-2.amazonaws.com/mandela-exhibition/wp-content/uploads/2018/08/location_white-01-01-1024x1024.png", 
      username: "", email: "", phoneNumber: "", receivedOrders: "", goodsUploaded: "", orderMade: "", code: "", passwordMail: "",
-    isPoped: false, isCart: false
+    isPoped: false, isCart: false, categoryOne: [], categoryTwo: [], categoryThree: [], dpMessage: false, imageSwitch: require("../../startupImage.jpg")
     })
     
 
@@ -139,7 +151,7 @@ export const AuthProvider = (props) => {
          
         try{
             const response = await tradeApi.post('/signup', {username, email, password, userType: type, phoneNumber})
-            console.log(response.data)
+            //console.log(response.data)
           if(response.data.token){
            
            await AsyncStorage.setItem('token', response.data.token)
@@ -151,7 +163,8 @@ export const AuthProvider = (props) => {
            
            await dispatch({type: 'signin', payload: response.data})
            await dispatch({type: 'cart_popup'})
-
+           
+           
           //  if(response.data.userType === "buyer"){
           //   props.navigation.navigate('buyerFlow')
           // }else if(response.data.userType === "seller"){
@@ -172,6 +185,10 @@ export const AuthProvider = (props) => {
 
     const dashboard = async(userType, props) =>{
       StopModal()
+      
+      const changeme = await AsyncStorage.setItem("count", "0")
+        animate()
+
       if(userType === "buyer"){
         props.navigation.navigate('buyerFlow')
       }else if(userType === "seller"){
@@ -192,6 +209,10 @@ export const AuthProvider = (props) => {
            await AsyncStorage.setItem('Dp', response.data.profilePicture)
 
            dispatch({type: 'signin', payload: response.data})
+           
+          
+           const changeme = await AsyncStorage.setItem("count", "0")
+           animate()
           
 
            if(response.data.userType === "buyer"){
@@ -231,6 +252,9 @@ export const AuthProvider = (props) => {
         if (token){
         
         dispatch({type: 'signin', payload: {token, username, userType, profilePicture}})
+      i
+        const changeme = await AsyncStorage.setItem("count", "0")
+        animate()
 
           if(userType === "buyer"){
             props.navigation.navigate('buyerFlow')
@@ -293,9 +317,9 @@ export const AuthProvider = (props) => {
 
 
 
-    const uploadProduct = async (productName, price, photo) => {
+    const uploadProduct = async (productName, price, photo, category) => {
 
-      if(!productName || !price || !photo){
+      if(!productName || !price || !photo || !category){
         return alert("Provide all information")
       }
 
@@ -324,7 +348,7 @@ export const AuthProvider = (props) => {
           console.log("good")
          console.log(data.url)
 
-         const response = await tradeApi.post('/uploadGoods', {imageUrl: data.url, goodName: productName, price: price})
+         const response = await tradeApi.post('/uploadGoods', {imageUrl: data.url, goodName: productName, price: price, category})
          
          if(response.data === "Successful"){
             //alert("Product succesfully uploaded")
@@ -335,7 +359,7 @@ export const AuthProvider = (props) => {
       }
         
       else if(response.data){
-        alert("An error occur while uploading product")
+        alert(response.data)
           dispatch({type: 'add_error', payload: response.data})
       }
       else {
@@ -352,6 +376,7 @@ export const AuthProvider = (props) => {
 
     const uploadDp = async (photo) => {
 
+      
       if(!photo){
         return alert("Provide a selfie picture")
       }
@@ -387,12 +412,12 @@ export const AuthProvider = (props) => {
        if(response.data === "successful"){
           //alert("Profile picture succesfully uploaded")
           await dispatch({type: 'cart_popup'})
-          dispatch({type: 'message', payload: "Profile picture succesfully uploaded"})
+          await dispatch({type: 'message', payload: "Profile picture succesfully uploaded"})
           await AsyncStorage.setItem('Dp', data.url)
-          dispatch({type: 'profile_pics', payload: data.url})
-          dispatch({type: 'clear_errorMessage', payload: data.url})
+         await dispatch({type: 'profile_pics', payload: data.url})
+         await dispatch({type: 'clear_errorMessage', payload: data.url})
+          await dispatch({type: 'dp_message'})
           
-         
           
     }
       
@@ -419,7 +444,7 @@ export const AuthProvider = (props) => {
 
 
 
-   const editProduct = async (id, image_url, likes, likeColor, goodName, price) => {
+   const editProduct = async (id, image_url, likes, likeColor, goodName, price, category) => {
 
     if(!image_url || !goodName || !price){
       alert("Provide all information")
@@ -428,7 +453,7 @@ export const AuthProvider = (props) => {
     dispatch({type: 'sending', payload: "loading"})
     
     try{
-    const response = await tradeApi.post('/updateGoods', {id, image_url, likes, likeColor, goodName, price})
+    const response = await tradeApi.post('/updateGoods', {id, image_url, likes, likeColor, goodName, price, category})
          
     if(response.data === "success"){
       //alert("Product succesfully updated")
@@ -485,6 +510,46 @@ const StopModal = async() =>{
   dispatch({type: 'stop_modal'})
 }
 
+const StartModal = async() =>{
+  dispatch({type: 'start_modal'})
+}
+
+
+const selectDp = async () => {
+  let response = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      aspect: [4, 3],
+      base64: true
+    });
+    
+    if (response.cancelled) {
+      console.log('got here');
+      return;
+    }
+
+      
+ await dispatch({type: 'change_image', payload: response})
+ await StartModal()
+}
+
+
+const chooseDp = async (props) => {
+  let response = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      aspect: [4, 3],
+      base64: true
+    });
+    
+    if (response.cancelled) {
+      console.log('got here');
+      return;
+    }
+
+    props.navigation.navigate("MyDp")   
+ await dispatch({type: 'change_image', payload: response})
+ await StartModal()
+ 
+}
 
 const Add_cart = async (imageUrl, goodName, ownerName, price, phoneNumber) => {
     
@@ -582,6 +647,9 @@ const changePassword = async (code, password, props) => {
  
    const fetchGoods = async () => {
 
+   
+   
+
     var today = new Date
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
@@ -609,15 +677,18 @@ const changePassword = async (code, password, props) => {
 
 
 
+
     try{
 
     const response = await tradeApi.post('/allgoods', {username: state.username})
          
          if(response.data){
              
-            
+          
            await dispatch({type: 'allgoods', payload: response.data})
       }
+      
+      
     }
       catch(err){
         alert("No network connection")
@@ -625,6 +696,45 @@ const changePassword = async (code, password, props) => {
       }
         
     
+}
+
+
+const animate = () => {
+
+  const interval = setInterval(async()=>{
+        
+
+    const image = async() => {
+     var store = await AsyncStorage.getItem("count")
+     
+     
+    var arr = [require("../../startupImage.jpg"),require("../../background/back2.jpg"), require("../../background/back3.jpg"), require("../../background/back4.jpg"),
+    require("../../background/back5.jpg"), require("../../background/back7.jpg"),
+    require("../../background/back8.jpg"), require("../../background/back9.jpg"), require("../../background/back10.jpg"),
+    require("../../background/back11.jpg"),
+    ]
+      //setDate(arr[Number(store)])
+     await dispatch({type: 'image_switch', payload: arr[Number(store)]})
+    }
+    const count = async() => {
+      var store1 = await AsyncStorage.getItem("count")
+      
+      var turnToNumber = Number(store1)
+      if(turnToNumber != 9){
+        var turnToString = String(turnToNumber + 1)
+      await AsyncStorage.setItem("count", turnToString)
+      }
+      else{
+        await AsyncStorage.setItem("count", "0")
+      }
+    }
+   
+    
+    await count()
+    await image()
+  }, 10000)
+
+
 }
 
 
@@ -956,7 +1066,11 @@ const addId2 = async (id, chatWith, requestor, props) => {
         stopLoading,
         updateLikes,
         StopModal,
-        dashboard
+        dashboard, 
+        StartModal,
+        selectDp,
+        chooseDp,
+        animate
         
     }
     
