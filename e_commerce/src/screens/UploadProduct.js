@@ -41,10 +41,13 @@ const UploadProduct = ({navigation}) => {
  
 
   return (
-    <SafeAreaView forceInset={{top: "always"}} style={{flex: 1}}>
+    <SafeAreaView forceInset={{top: "always"}} style={{flex: 1, backgroundColor: "white"}}>
       <ScrollView>
       <NavigationEvents onWillFocus={clearErrorMessage, clearUploadProduct}/>
-      <Text style={styles.text}>Product Upload</Text>
+      <View style={{height: hp("7%"), backgroundColor: "green", 
+      flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: hp("3%")}}>
+      <Text style={styles.text}>PRODUCT UPLOAD</Text>
+      </View>
       <TextInput 
                 
                 style={styles.textInput} 
@@ -82,7 +85,7 @@ const UploadProduct = ({navigation}) => {
     
      <TouchableOpacity activeOpacity={.8} style={styles.container} onPress={selectImage}>
        {state.uri ?<Image style={styles.image} source={{uri: state.uri}} /> : 
-       <Text style={{fontSize: wp("4%"), fontWeight: "bold", fontStyle: "italic", color: "#797979"}}>Tap to select the product image</Text>}
+       <Text style={{fontSize: wp("3.2%"), fontWeight: "800", color: "#797979"}}>Tap to select the product image</Text>}
       </TouchableOpacity>
       
      
@@ -130,12 +133,12 @@ UploadProduct.navigationOptions = {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: wp("7%"),
+    fontSize: wp("4.5%"),
     textAlign: "center",
-    fontWeight: "bold",
-    paddingTop: hp("1%"),
-    paddingBottom: hp("3%"),
-    color: "green"
+    //fontWeight: "bold",
+    //paddingTop: hp("1%"),
+    //paddingBottom: hp("3%"),
+    color: "white"
   },
   image: {
     width: wp("70%"),
@@ -146,12 +149,18 @@ const styles = StyleSheet.create({
     marginVertical: hp("1%"),
     width: wp("70%"),
     height: hp("50%"),
-    backgroundColor: "whitesmoke",
-    borderColor: "#C3C3C3",
-    borderWidth: 1,
+    backgroundColor: "white",
+    // borderColor: "#C3C3C3",
+    // borderWidth: 1,
     justifyContent: "center", 
     alignItems: "center",
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 4,
+    overflow: "hidden"
   },
   button:{
     flexDirection: "row",
@@ -164,14 +173,19 @@ const styles = StyleSheet.create({
     marginTop: hp("2p%")
   },
   textInput: {
-    borderWidth: 1,
+    //borderWidth: 1,
     height: hp("7%"),
     marginBottom: hp("2%"),
     paddingLeft: wp("4%"),
-    backgroundColor: "whitesmoke",
+    backgroundColor: "white",
     borderRadius: 10,
     marginHorizontal: wp("10%"),
-    borderColor: "#C3C3C3",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 4,
+    //borderColor: "#C3C3C3",
     // textAlign: "center"
 },
 modaltext: {

@@ -58,7 +58,7 @@ const SellerGoods = (props) => {
         <View style={styles.title}>
           <View>
           <View style={{flexDirection: "row", justifyContent: "center"}}>  
-          <Text style={{color: "#595757",fontSize: wp("5%")}}>{item.goodName}</Text>
+          <Text style={{color: "#595757",fontSize: wp("4%"), alignSelf: "center"}}>{item.goodName}</Text>
           <TouchableOpacity onPress={()=>props.navigation.navigate("EditGood",{
             data: {
               id: item._id,
@@ -70,20 +70,20 @@ const SellerGoods = (props) => {
               category: item.category
             }
           })}>
-          <EvilIcons name="pencil" size={40} style={{marginLeft: wp("3%"), color: "#595757"}}/>
+          <EvilIcons name="pencil" size={35} style={{marginLeft: wp("4%"), color: "#595757"}}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>deleteGoods(item._id)}>
-            <FontAwesome name="trash-o" size={27} style={{marginLeft: wp("1%"), color: "#595757"}}/>
+            <FontAwesome name="trash-o" size={25} style={{marginLeft: wp("1%"), color: "#595757"}}/>
             </TouchableOpacity>
           </View>
 
           <Image style={styles.image} source={{uri: item.image}} /> 
-          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("6%")}}>{`NGN ${item.price}`}</Text></View>
+          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("5%")}}>{`NGN ${item.price}`}</Text></View>
           </View>
 
           <View style={{flexDirection: "row"}}>
-            <Text style={{color: "#797979", fontSize: wp("4.5%"), alignSelf: "center", paddingLeft: wp("5%")}}>{`${item.likes} likes`}</Text>
-            <AntDesign name="hearto" style={{color: "#797979", marginLeft: wp("3%")}} size={32} />
+            <Text style={{color: "#797979", fontSize: wp("4%"), alignSelf: "center", paddingLeft: wp("4%")}}>{`${item.likes} likes`}</Text>
+            <AntDesign name="hearto" style={{color: "#797979", marginLeft: wp("3%")}} size={27} />
           </View>
         </View>
     
@@ -129,33 +129,35 @@ const styles = StyleSheet.create({
   image: {
     marginTop: hp("1%"),
     marginBottom: hp("1%"),
-    width: wp("78%"),
-    height: hp("50%"),
+    width: wp("68%"),
+    height: hp("43%"),
     marginHorizontal: wp("3%"),
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12
   },
   title: {
-    marginLeft: wp("7.5%"),
-    marginRight: wp("7.5%"), 
+    
     backgroundColor: "rgba(238,238,238, 0.6)", 
     marginTop: hp("2p%"),
     marginBottom: hp("2%"), 
     borderRadius: 12,
-    height: hp("70%"),
-    width: wp("85%")
+    //height: hp("70%"),
+    width: wp("74%"),
+    paddingVertical: hp("1%"),
+    marginHorizontal: wp("13%")
   }, 
   price:{
-    height: hp("6%"), 
+    //height: hp("6%"), 
     borderColor: "#C3C3C3",
     borderRadius: 10,
    backgroundColor: "#797979",
     borderWidth: 1,
-    width: wp("78%"),
+    width: wp("68%"),
     justifyContent: "center",
-    marginBottom: hp("2p%"),
+    marginBottom: hp("1p%"),
     marginHorizontal: wp("3%"),
-    marginTop: hp("1%")
+    //marginTop: hp("1%"),
+    paddingVertical: hp(".5%")
   },
   cart: {
     height: hp("6%"), 

@@ -190,11 +190,11 @@ const styles = StyleSheet.create({
     marginTop: hp("2p%"),
     marginBottom: hp("2%"), 
     borderRadius: 12,
-    height: hp("82%"),
+    //height: hp("82%"),
     width: wp("85%")
   }, 
   price:{
-    height: hp("6%"), 
+    //height: hp("6%"), 
     borderColor: "#C3C3C3",
     borderRadius: 10,
    backgroundColor: "#797979",
@@ -203,7 +203,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: hp("2p%"),
     marginHorizontal: wp("3%"),
-    marginTop: hp("1%")
+    marginTop: hp("1%"),
+    paddingVertical: hp(".6%")
   },
   cart: {
     height: hp("6%"), 

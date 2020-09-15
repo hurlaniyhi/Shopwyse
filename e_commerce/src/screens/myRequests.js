@@ -66,7 +66,7 @@ const AllRequests = (props) => {
         <View style={styles.title}>
           <View>
             <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: hp("0.5%")}}>
-          <Text style={{color: "#595757", fontSize: wp("5%")}}>{item.goodName}</Text>
+          <Text style={{color: "#595757", fontSize: wp("5%"), alignSelf: "center"}}>{item.goodName}</Text>
           <TouchableOpacity onPress={()=>deleteRequest(item._id)}>
             <FontAwesome name="trash-o" size={27} style={{marginLeft: wp("5%"), color: "#595757"}}/>
             </TouchableOpacity>
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
     marginTop: hp("2p%"),
     marginBottom: hp("2%"), 
     borderRadius: 12,
-    height: hp("74.5%"),
+    //height: hp("74.5%"),
     width: wp("85%")
   }, 
   price:{
-    height: hp("6%"), 
+    //height: hp("6%"), 
     borderColor: "#C3C3C3",
     borderRadius: 10,
    backgroundColor: "#797979",
@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: hp("2p%"),
     marginHorizontal: wp("3%"),
-    marginTop: hp("1%")
+    marginTop: hp("1%"),
+    paddingVertical: hp(".6%")
   },
   cart: {
     height: hp("6%"), 

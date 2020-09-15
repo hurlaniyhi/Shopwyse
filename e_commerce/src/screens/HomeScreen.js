@@ -83,7 +83,7 @@ const HomeScreen = (props) => {
     
 
    {!state.goods ? <ActivityIndicator size="large" style={{marginTop: 200, transform: [{scale: 1.5}]}} /> : 
-   <View style={{flex: 1, bottom: hp("4%"), 
+   <View style={{flex: 1, marginTop: hp("-4%"), 
    backgroundColor: "whitesmoke", borderTopLeftRadius: 35, 
    borderTopRightRadius: 35, marginHorizontal: wp("0.4"), overflow: "hidden"}}>
      <Text style={{height: hp("1%")}}></Text>
@@ -279,8 +279,8 @@ const styles = StyleSheet.create({
     marginTop: hp("1.5%"), 
     borderRadius: 12,
     //height: hp("59%"),
-    borderWidth: 1,
-    borderColor: "rgba(196,194,194,0.4)",
+    // borderWidth: 1,
+    // borderColor: "rgba(196,194,194,0.4)",
     width: wp("37%"),
     flex: 1
   }, 

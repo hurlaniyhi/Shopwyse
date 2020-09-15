@@ -58,10 +58,10 @@ const MyCarts = (props) => {
         <View style={styles.title}>
           <View>
           <View style={{flexDirection: "row", justifyContent: "center"}}>  
-          <Text style={{color: "#595757",fontSize: wp("5%")}}>{item.goodName}</Text>
+          <Text style={{color: "#595757",fontSize: wp("4.3%"), alignSelf: "center"}}>{item.goodName}</Text>
           
           <TouchableOpacity onPress={()=>deleteCart(item._id)}>
-            <FontAwesome name="trash-o" size={27} style={{marginLeft: wp("1%"), color: "#595757"}}/>
+            <FontAwesome name="trash-o" size={23} style={{marginLeft: wp("4%"), color: "#595757"}}/>
             </TouchableOpacity>
           </View>
           <TouchableOpacity activeOpacity={.8} onPress={()=>props.navigation.navigate("Request",{
@@ -75,7 +75,7 @@ const MyCarts = (props) => {
             }
           })}>
           <Image style={styles.image} source={{uri: item.image}} /> 
-          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("6%")}}>{`NGN ${item.price}`}</Text></View>
+          <View style={styles.price}><Text style={{alignSelf: "center", color: "white", fontSize: wp("5.2%")}}>{`NGN ${item.price}`}</Text></View>
           </TouchableOpacity>
           </View>
           
@@ -130,33 +130,35 @@ const styles = StyleSheet.create({
     marginBottom: hp("1%"),
     // width: wp("78%"),
     // height: hp("50%"),
-    width: wp("65%"),
-    height: hp("45%"),
+    width: wp("68%"),
+    height: hp("43%"),
     marginHorizontal: wp("3%"),
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12
   },
   title: {
-    marginLeft: wp("14.5%"),
-    marginRight: wp("14.5%"), 
+    marginLeft: wp("13%"),
+    marginRight: wp("13%"), 
     backgroundColor: "rgba(238,238,238, 0.6)", 
     marginTop: hp("2p%"),
     marginBottom: hp("3%"), 
     borderRadius: 12,
     //height: hp("67%"),
-    width: wp("71%")
+    width: wp("74%"),
+    paddingVertical: hp("1%")
   }, 
   price:{
-    height: hp("6%"), 
+   // height: hp("6%"), 
     borderColor: "#C3C3C3",
     borderRadius: 10,
    backgroundColor: "#797979",
     borderWidth: 1,
-    width: wp("65%"),
+    width: wp("68%"),
     justifyContent: "center",
-    marginBottom: hp("2p%"),
+    marginBottom: hp("1p%"),
     marginHorizontal: wp("3%"),
-    marginTop: hp("1%")
+    paddingVertical: hp(".5%")
+    //marginTop: hp("1%")
   },
   cart: {
     height: hp("6%"), 

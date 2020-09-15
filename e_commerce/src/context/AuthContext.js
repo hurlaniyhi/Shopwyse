@@ -201,7 +201,7 @@ export const AuthProvider = (props) => {
         dispatch({type: 'sending', payload: "loading"})
         try{
            const response = await tradeApi.post('/signin', {username, password})
-           console.log(response.data)
+           
            if(response.data.token){
            await AsyncStorage.setItem('token', response.data.token)
            await AsyncStorage.setItem('username', response.data.username)
@@ -252,7 +252,7 @@ export const AuthProvider = (props) => {
         if (token){
         
         dispatch({type: 'signin', payload: {token, username, userType, profilePicture}})
-      i
+      
         const changeme = await AsyncStorage.setItem("count", "0")
         animate()
 
@@ -345,7 +345,7 @@ export const AuthProvider = (props) => {
           method: 'POST',
         }).then(async r => {
           let data = await r.json()
-          console.log("good")
+         
          console.log(data.url)
 
          const response = await tradeApi.post('/uploadGoods', {imageUrl: data.url, goodName: productName, price: price, category})
@@ -618,9 +618,10 @@ const changePassword = async (code, password, props) => {
   const response = await tradeApi.post('/updatePassword', {password: password, email: state.passwordMail})
   if (response.data.message){
   
-    dispatch({type: 'add_error', payload: "No network connection"})
-    alert("password successfully changed")
-    props.navigation.navigate("Signin")
+   await dispatch({type: 'add_error', payload: ""})
+   await StartModal()
+    // alert("password successfully changed")
+    // props.navigation.navigate("Signin")
 
   }
   else{
@@ -743,7 +744,7 @@ const updateLikes = async (id) => {
 
     const response = await tradeApi.post('/like', {id: id, username: state.username})
     if (response.data){
-      console.log(response.data)
+     
       fetchGoods()
     }
     else{
@@ -782,7 +783,7 @@ const fetchMyGoods = async () => {
     const response = await tradeApi.get('/ownergoods')
          
          if(response.data){
-             console.log(response.data)
+             
             
             dispatch({type: 'my_products', payload: response.data})
       }
@@ -801,7 +802,7 @@ const fetchMyCarts = async () => {
     const response = await tradeApi.get('/myCarts')
          
          if(response.data){
-             console.log(response.data)
+             
             
             dispatch({type: 'my_carts', payload: response.data})
       }
@@ -893,8 +894,7 @@ const fetchRequestsToSeller = async () => {
                 }
                
             }
-            console.log(pending)
-            console.log(completed)
+            
             dispatch({type: 'requests_to_seller', payload: {requests: response.data, pending: pending, completed: completed}})
       }
     }
@@ -931,7 +931,7 @@ const userInfo = async () => {
    const response = await tradeApi.get('/profile')
         
         if(response.data){
-          // console.log(response.data)
+          
           dispatch({type: 'my_profile', payload: response.data})
          
            

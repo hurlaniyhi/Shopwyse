@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, Image, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from "react-native";
 import {SafeAreaView} from 'react-navigation'
-import {Entypo} from '@expo/vector-icons'
+import {Entypo, AntDesign, FontAwesome} from '@expo/vector-icons'
 import AuthContext from "../context/AuthContext"
 import {
   heightPercentageToDP as hp,
@@ -9,6 +9,7 @@ import {
 } from 'react-native-responsive-screen'
 
 import {Text, Button} from 'react-native-elements'
+import Modal from 'react-native-modal'
 
 
 const ChangePassword = (props) => {
@@ -19,8 +20,12 @@ const ChangePassword = (props) => {
   
   
 
-  const {state, signin, clearErrorMessage, changePassword} = useContext(AuthContext)
+  const {state, signin, clearErrorMessage, changePassword, StopModal} = useContext(AuthContext)
  
+  const okay = async() =>{
+    await StopModal()
+    props.navigation.navigate("Signin")
+  } 
   
 
 return (
@@ -66,6 +71,30 @@ return (
      
     </View>
     </ScrollView>
+    <Modal 
+        isVisible={state.isCart}
+        onBackdropPress={()=>okay()}
+        swipeDirection="right"
+        animationIn="slideInUp" 
+        animationOut="slideOutUp"
+        onSwipeComplete={()=>okay()}
+        style={styles.modal2}
+    
+        > 
+        <View style={{bottom: hp("9%")}}>
+       <AntDesign name="checkcircle" size={wp("17%")} color = "white" style={{color: "green"}} />
+       <FontAwesome name="circle" size={wp("17%")} color="white" style={{position: "absolute", right: wp("1%"), zIndex: -1}}/>
+        </View>
+          <Text style={{fontSize: wp("7%"), bottom: hp("7%"), color: "green", fontWeight: "bold"}}>Awesome!</Text>
+          <Text style={{fontSize: wp("4.5%"),color: "#BDBDBD", bottom: hp("3%"), paddingBottom: hp("6%"), textAlign: "center" }}>
+            Password successfully changed!
+          </Text> 
+          <TouchableOpacity activeOpacity={.8} style={styles.modaltext2} onPress={()=>okay()}>
+              <Text style={{color: "white", fontWeight: "bold", fontSize: wp("4.2%")}}>OK</Text>
+          </TouchableOpacity>
+        
+        </Modal>
+
   </SafeAreaView>
 )
 };
@@ -103,6 +132,27 @@ button:{
   backgroundColor: "green",
   borderRadius: 10,
   marginTop: hp("1p%")
+},
+modaltext2: {
+  height: hp("6%"),
+  backgroundColor: "green",
+  width: wp("60%"),
+  justifyContent: "center",
+  alignItems: "center",
+  
+  borderRadius: 10
+  
+}, 
+modal2: {
+  // justifyContent: "center",
+  alignItems: "center",
+  // height: 50,
+  marginHorizontal: wp("10%"),
+  marginTop: hp("26%"),
+  maxHeight: hp("40%"),
+  backgroundColor: "white",
+  borderRadius: 20,
+  flex: 1
 }
  
 });
