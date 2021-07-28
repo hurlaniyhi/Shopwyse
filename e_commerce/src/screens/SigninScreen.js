@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
         borderColor: "#C3C3C3"
     },
     text:{
-
       paddingTop: hp("8%"),
       textAlign: "center",
       color: "green"

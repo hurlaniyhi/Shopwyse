@@ -49,7 +49,7 @@ const ViewDP = ({navigation}) => {
      
       
         <Modal 
-        isVisible={state.isCart}
+        isVisible={state.isPics}
        // onBackdropPress={()=>StopModal()}
         swipeDirection="right"
         animationIn="slideInUp"

@@ -59,7 +59,7 @@ const HomeScreen = (props) => {
   
 
   return (
-    <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194",}}>
+    <SafeAreaView style={{flex: 1,  backgroundColor: "rgba(196, 194, 194)"}}>
       <NavigationEvents onWillFocus={fetchGoods}/>
     
     

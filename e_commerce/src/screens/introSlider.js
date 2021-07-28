@@ -24,7 +24,6 @@ import {
     },
     overlay: {
       flex: 1,
-      
       backgroundColor: "rgba(0, 104, 58, .4)", justifyContent: "center"
    },
    last: {

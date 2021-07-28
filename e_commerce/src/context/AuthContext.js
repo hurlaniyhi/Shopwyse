@@ -32,10 +32,10 @@ const authReducer = (state, action) => {
             return{...state, photo: action.payload, uri: action.payload.uri}
 
         case 'stop_modal':
-          return{...state, isPoped: false, isCart: false, uri: null, photo: null, dpMessage: false}
+          return{...state, isPoped: false, isCart: false, isPics: false, uri: null, photo: null, dpMessage: false}
 
         case 'start_modal':
-          return{...state, isCart: true}
+          return{...state, isPics: true}
 
         case 'dp_message':
           return{...state, dpMessage: true}
@@ -136,7 +136,7 @@ export const AuthProvider = (props) => {
     pending: 0, completed: 0, carting: "", chatId: "", chatWith: "", chatOwner: "", loadChat: "", day: "", date: "",
      Dp: "https://s3-ap-southeast-2.amazonaws.com/mandela-exhibition/wp-content/uploads/2018/08/location_white-01-01-1024x1024.png", 
      username: "", email: "", phoneNumber: "", receivedOrders: "", goodsUploaded: "", orderMade: "", code: "", passwordMail: "",
-    isPoped: false, isCart: false, categoryOne: [], categoryTwo: [], categoryThree: [], dpMessage: false, imageSwitch: require("../../startupImage.jpg")
+    isPoped: false, isCart: false, isPics: false, categoryOne: [], categoryTwo: [], categoryThree: [], dpMessage: false, imageSwitch: require("../../startupImage.jpg")
     })
     
 
@@ -411,7 +411,7 @@ export const AuthProvider = (props) => {
        
        if(response.data === "successful"){
           //alert("Profile picture succesfully uploaded")
-          await dispatch({type: 'cart_popup'})
+         // await dispatch({type: 'cart_popup'})
           await dispatch({type: 'message', payload: "Profile picture succesfully uploaded"})
           await AsyncStorage.setItem('Dp', data.url)
          await dispatch({type: 'profile_pics', payload: data.url})
@@ -641,15 +641,8 @@ const changePassword = async (code, password, props) => {
 }
 
 
-
-
-
-
  
    const fetchGoods = async () => {
-
-   
-   
 
     var today = new Date
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()

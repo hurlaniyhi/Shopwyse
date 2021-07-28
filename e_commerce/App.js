@@ -285,11 +285,6 @@ const styles = StyleSheet.create({
 
 const App = createAppContainer(switchNavigator);
 
-
-
-
-
-
 export default () => {
   return(
         <AuthProvider>
